@@ -23,22 +23,22 @@ const VereadoresSlider = () => {
     useEffect(() => {
         const fetchVereadores = async () => {
             try {
-                const response = await fetch('/api/dadosabertosexportar?d=vereadores&a=&f=json');
+                const response = await fetch('https://cmpacatuba.ce.gov.br/dadosabertosexportar?d=vereadores&a=&f=json&itens_por_pagina=20');
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 const data = await response.json();
                 setVereadores(data.dados || []);
-            } catch (e) {
-                console.error("Falha ao buscar vereadores:", e);
-                setError("Não foi possível carregar os dados dos vereadores.");
+            } catch (err) {
+                setError('Falha ao carregar os dados dos vereadores.');
+                console.log(err);
             } finally {
                 setLoading(false);
             }
         };
 
         fetchVereadores();
-    }, []);
+    }, []); // Setter functions from useState are stable and don't need to be in the dependency array.
 
     if (loading) {
         return <div className="loading-text">Carregando vereadores...</div>;
