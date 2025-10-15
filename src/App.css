@@ -21,7 +21,7 @@
     background-image: url('https://i.imgur.com/vH1Wf4c.jpeg'); /* Imagem de fundo da Câmara */
     background-size: cover;
     background-position: center;
-    height: 450px; /* Ajuste a altura conforme necessário */
+    height: 550px; /* Ajuste a altura conforme necessário */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -30,12 +30,10 @@
 }
 
 .header-overlay {
-    background-color: rgba(0, 0, 0, 0.4); /* Escurecimento da imagem para realçar o texto */
     padding: 40px 20px;
     border-radius: 8px;
     position: absolute;
-    width: 90%;
-    max-width: 600px;
+    width: 100%;
 }
 
 .header-title {
@@ -53,26 +51,54 @@
     justify-content: center;
     gap: 20px;
 }
+.header-bg-image{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 100% 80%;
+    top: 0;
+    left: 0;
+    z-index: 10%;
+    top: 0;
+    left: 0;
 
+    z-index: 0;
+    filter: brightness(0.6); /* Ajusta o brilho da imagem */
+}
 .btn-primary, .btn-secondary {
     padding: 12px 30px;
     border-radius: 4px;
     font-size: 1em;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: all 0.3s;
+    width: 150px;
 }
 
 .btn-primary {
-    background-color: #ffc107; /* Amarelo da imagem */
-    color: #333;
+    background-color: #00128A; /* Azul da imagem */
+    color: #fff;
     border: none;
+}
+
+.btn-primary:hover {
+    background-color: #cc9902;
 }
 
 .btn-secondary {
     background-color: transparent;
     color: white;
-    border: 1px solid white;
+    border: 1px solid #ffc107;
 }
+
+.btn-secondary:hover {
+    background-color: #ffc107;
+    color: #333;
+}
+
+
+
+
 
 /* 2. Seção de Serviços (Grid) */
 .services-grid-section {
@@ -166,6 +192,211 @@
     color: #666;
 }
 
+
+/* Estilos Específicos para a Página de Login */
+.login-container {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Coluna Esquerda (Azul) */
+.login-left-panel {
+    flex: 1;
+    background-color: #0d47a1; /* Azul Institucional */
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    text-align: center;
+}
+
+.logo-section {
+    margin-bottom: auto; /* Empurra o conteúdo para cima (mantendo o rodapé embaixo) */
+    margin-top: 20vh;
+}
+
+.brasao {
+    height: 120px;
+    margin-bottom: 20px;
+}
+
+.login-left-panel h1 {
+    font-size: 1.8em;
+    margin: 10px 0 5px;
+}
+
+.login-left-panel p {
+    font-size: 1em;
+    opacity: 0.8;
+}
+
+.developed-by {
+    margin-top: auto; /* Fica no rodapé da coluna */
+    font-size: 0.8em;
+    opacity: 0.6;
+}
+
+/* Coluna Direita (Branca) */
+.login-right-panel {
+    flex: 1;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.login-form-box {
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+}
+.div-portal-title{
+  text-align: left;
+}
+
+.portal-title {
+    font-size: 1.2em;
+    color: #666;
+    margin-bottom: -20px;
+}
+
+/* Estilos do Formulário */
+.login-form-box input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box; /* Garante que o padding não aumente o tamanho */
+    font-size: 1em;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.btn-entrar, .btn-cadastrar {
+    flex: 1;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    font-size: 1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-entrar {
+    background-color: #0d47a1; /* Azul forte */
+    color: white;
+}
+
+.btn-cadastrar {
+    background-color: #ffc107; /* Amarelo forte */
+    color: #333;
+}
+
+.btn-entrar:hover:not([disabled]) {
+    background-color: #0a3a87;
+}
+
+.btn-cadastrar:hover:not([disabled]) {
+    background-color: #ffb300;
+}
+
+.forgot-password {
+    background: none;
+    border: none;
+    color: #ff7707; 
+    margin-top: 20px;
+    font-size: 0.9em;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.login-error {
+    color: #dc3545; /* Vermelho para erro */
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    font-size: 0.9em;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .login-container {
+        flex-direction: column;
+    }
+    .login-left-panel {
+        min-height: 250px; /* Reduz o tamanho da coluna azul no mobile */
+        margin-bottom: 20px;
+    }
+    .logo-section {
+        margin-top: 5vh;
+        margin-bottom: 20px;
+    }
+    .developed-by {
+        margin-top: 20px;
+    }
+    .login-right-panel {
+        padding: 40px 20px;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* -------------------------------------------------------------------------------------------------------------------------- */
 /* 4. Rodapé */
 .footer {
     background-color: #0d47a1; /* Azul escuro, cor similar ao da imagem */
