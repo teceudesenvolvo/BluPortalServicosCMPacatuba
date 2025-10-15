@@ -6,12 +6,10 @@ import { getFirestore } from "firebase/firestore";
 
 // Substitua com as suas chaves de configuração do Firebase
 const firebaseConfig = {
-  apiKey: "SUA_API_KEY",
-  authDomain: "SEU_AUTH_DOMAIN",
-  projectId: "SEU_PROJECT_ID",
-  storageBucket: "SEU_STORAGE_BUCKET",
-  messagingSenderId: "SEU_MESSAGING_SENDER_ID",
-  appId: "SEU_APP_ID"
+  apiKey: "AIzaSyDZCsp-Z_VsEsFA_3JcRC0lyFMSr3ETGUY",
+  authDomain: "cm-pacatuba.firebaseapp.com", 
+  projectId: "cm-pacatuba",
+  databaseURL: "https://cm-pacatuba-default-rtdb.firebaseio.com", 
 };
 
 // Inicializa o Firebase
