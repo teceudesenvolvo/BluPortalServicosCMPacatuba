@@ -18,7 +18,7 @@
 
 /* 1. Header Principal */
 .main-header {
-    background-image: url('https://i.imgur.com/vH1Wf4c.jpeg'); /* Imagem de fundo da Câmara */
+    background: #00128A; /* Imagem de fundo da Câmara */
     background-size: cover;
     background-position: center;
     height: 550px; /* Ajuste a altura conforme necessário */
@@ -62,9 +62,9 @@
     z-index: 10%;
     top: 0;
     left: 0;
-
     z-index: 0;
     filter: brightness(0.6); /* Ajusta o brilho da imagem */
+    opacity: 0.7;
 }
 .btn-primary, .btn-secondary {
     padding: 12px 30px;
@@ -76,8 +76,8 @@
 }
 
 .btn-primary {
-    background-color: #00128A; /* Azul da imagem */
-    color: #fff;
+    background-color: #feb700; /* Azul da imagem */
+    color: #000000;
     border: none;
 }
 
@@ -157,13 +157,15 @@
 
 .vereador-card {
     background-color: white;
-    border-radius: 8px;
+    border-radius: 10px;
+    margin-bottom: 10px;
     padding: 20px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    height: 100%;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+    height: 220px;
     display: flex;
     flex-direction: column;
     align-items: center;
+    width: 80%;
 }
 
 .vereador-foto-container {
@@ -202,7 +204,7 @@
 /* Coluna Esquerda (Azul) */
 .login-left-panel {
     flex: 1;
-    background-color: #0d47a1; /* Azul Institucional */
+    background-color: #00128A; /* Azul Institucional */
     color: white;
     display: flex;
     flex-direction: column;
@@ -292,7 +294,7 @@
 }
 
 .btn-entrar {
-    background-color: #0d47a1; /* Azul forte */
+    background-color: #00128A; /* Azul forte */
     color: white;
 }
 
@@ -302,7 +304,7 @@
 }
 
 .btn-entrar:hover:not([disabled]) {
-    background-color: #0a3a87;
+    background-color: #011175;
 }
 
 .btn-cadastrar:hover:not([disabled]) {
@@ -399,7 +401,7 @@
 /* -------------------------------------------------------------------------------------------------------------------------- */
 /* 4. Rodapé */
 .footer {
-    background-color: #0d47a1; /* Azul escuro, cor similar ao da imagem */
+    background-color: #00128A; /* Azul escuro, cor similar ao da imagem */
     color: white;
     padding: 40px 20px 10px;
     text-align: left;
