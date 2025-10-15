@@ -25,7 +25,7 @@ const VereadoresSlider = () => {
         const fetchVereadores = async () => {
             try {
                 // 2. Usa axios com o caminho relativo do proxy para evitar erros de CORS
-                const response = await axios.get('/api/dadosabertosexportar?d=vereadores&a=&f=json&itens_por_pagina=20');
+                const response = await axios.get('https://cmpacatuba.ce.gov.br/dadosabertosexportar?d=vereadores&a=&f=json&itens_por_pagina=20');
                 // 3. Axios já retorna os dados em `response.data`
                 setVereadores(response.data.dados || []);
             } catch (err) {
