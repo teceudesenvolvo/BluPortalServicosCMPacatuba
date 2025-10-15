@@ -1,6 +1,7 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Portal CMP",
+  "name": "Portal de Serviços - CM Pacatuba",
+  "description": "Seu acesso fácil e rápido ao Poder Legislativo Municipal de Pacatuba.",
   "icons": [
     {
       "src": "favicon.ico",
@@ -20,6 +21,6 @@
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#000000",
+  "theme_color": "#0D47A1",
   "background_color": "#ffffff"
 }
