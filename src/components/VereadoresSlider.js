@@ -23,6 +23,7 @@ const VereadoresSlider = () => {
     useEffect(() => {
         const fetchVereadores = async () => {
             try {
+                // Usamos o caminho relativo para acionar o proxy configurado em setupProxy.js
                 const response = await fetch('/api/dadosabertosexportar?d=vereadores&a=&f=json');
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);

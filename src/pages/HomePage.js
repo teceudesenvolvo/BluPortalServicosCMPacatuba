@@ -1,5 +1,13 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import {
+    LiaBookOpenSolid,
+    LiaBalanceScaleLeftSolid,
+    LiaUserFriendsSolid,
+    LiaUserAstronautSolid,
+    LiaFemaleSolid,
+    LiaUsersSolid,
+} from "react-icons/lia";
 
 import Footer from '../components/Footer'; // Importa o novo componente
 import VereadoresSlider from '../components/VereadoresSlider'; // Importa o slider
@@ -23,20 +31,20 @@ const HomePage = () => {
 
     // Simulação dos ícones dos serviços (Usando Unicode ou Font Icons)
     const icons = {
-        procon: '🛒',
-        juridico: '⚖️',
-        balcao: '🧑‍💼',
-        ouvidoria: '🗣️',
-        procuradoria: '👩‍⚖️',
-        vereadores: '🏛️',
+        procon: <LiaBookOpenSolid />,
+        juridico: <LiaBalanceScaleLeftSolid />,
+        balcao: <LiaUserFriendsSolid />,
+        ouvidoria: <LiaUserAstronautSolid />,
+        procuradoria: <LiaFemaleSolid />,
+        vereadores: <LiaUsersSolid />
     };
 
     return (
         <div className="home-page">
-            
+
             {/* 1. Header Principal */}
             <header className="main-header">
-                    <img src={Foto} alt="Capa" className="header-bg-image" />
+                <img src={Foto} alt="Capa" className="header-bg-image" />
                 <div className="header-overlay">
                     <h1 className="header-title">Bem vindo ao Portal de Serviços</h1>
                     <p className="header-subtitle">Seu acesso fácil e rápido ao Poder Legislativo Municipal.</p>
@@ -56,7 +64,7 @@ const HomePage = () => {
                     <ServiceButton icon={icons.ouvidoria} title="Ouvidoria" navigate={navigate} />
                     <ServiceButton icon={icons.procuradoria} title="Procuradoria da Mulher" navigate={navigate} />
                     {/* O botão "Vereadores" da grade vai para Login, mas o slider abaixo é para informações abertas */}
-                    <ServiceButton icon={icons.vereadores} title="Vereadores" navigate={navigate} /> 
+                    <ServiceButton icon={icons.vereadores} title="Vereadores" navigate={navigate} />
                 </div>
             </section>
 
