@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Splide, SplideSlide } from '@splidejs/react-splide';
+import axios from 'axios'; // 1. Importa o axios
 
 // Componente: Card do Vereador (agora parte deste módulo)
 const VereadorCard = ({ nome, titulo, foto }) => (
@@ -23,16 +24,14 @@ const VereadoresSlider = () => {
     useEffect(() => {
         const fetchVereadores = async () => {
             try {
-                // Usamos o caminho relativo para acionar o proxy configurado em setupProxy.js
-                const response = await fetch('https://cmpacatuba.ce.gov.br/dadosabertosexportar?d=vereadores&a=&f=json&itens_por_pagina=20');
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                const data = await response.json();
-                setVereadores(data.dados || []);
+                // 2. Usa axios com o caminho relativo do proxy para evitar erros de CORS
+                const response = await axios.get('/api/dadosabertosexportar?d=vereadores&a=&f=json&itens_por_pagina=20');
+                // 3. Axios já retorna os dados em `response.data`
+                setVereadores(response.data.dados || []);
             } catch (err) {
+                // 4. Axios trata erros de status (4xx, 5xx) automaticamente no catch
                 setError('Falha ao carregar os dados dos vereadores.');
-                console.log(err);
+                console.error("Erro ao buscar com axios:", err);
             } finally {
                 setLoading(false);
             }
