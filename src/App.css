@@ -1,0 +1,267 @@
+@import '@splidejs/react-splide/css';
+
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+/* Estilos Gerais (Para dar o visual da imagem) */
+.home-page {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    color: #333;
+}
+
+/* 1. Header Principal */
+.main-header {
+    background-image: url('https://i.imgur.com/vH1Wf4c.jpeg'); /* Imagem de fundo da Câmara */
+    background-size: cover;
+    background-position: center;
+    height: 450px; /* Ajuste a altura conforme necessário */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    color: white;
+}
+
+.header-overlay {
+    background-color: rgba(0, 0, 0, 0.4); /* Escurecimento da imagem para realçar o texto */
+    padding: 40px 20px;
+    border-radius: 8px;
+    position: absolute;
+    width: 90%;
+    max-width: 600px;
+}
+
+.header-title {
+    font-size: 2.5em;
+    margin-bottom: 10px;
+}
+
+.header-subtitle {
+    font-size: 1.1em;
+    margin-bottom: 30px;
+}
+
+.header-actions {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.btn-primary, .btn-secondary {
+    padding: 12px 30px;
+    border-radius: 4px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-primary {
+    background-color: #ffc107; /* Amarelo da imagem */
+    color: #333;
+    border: none;
+}
+
+.btn-secondary {
+    background-color: transparent;
+    color: white;
+    border: 1px solid white;
+}
+
+/* 2. Seção de Serviços (Grid) */
+.services-grid-section {
+    padding: 40px 20px;
+}
+
+.services-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.service-btn {
+    background-color: #e0e0e0; /* Cinza claro da imagem */
+    border: none;
+    padding: 30px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 120px;
+}
+
+.service-btn:hover {
+    background-color: #d0d0d0;
+}
+
+.service-icon {
+    font-size: 3em;
+    margin-bottom: 5px;
+}
+
+.service-title {
+    margin: 0;
+    font-weight: bold;
+    color: #555;
+}
+
+/* 3. Slider de Vereadores */
+.vereadores-slider-section {
+    padding: 40px 20px 80px;
+    background-color: #f7f7f7;
+}
+
+.section-title {
+    font-size: 1.8em;
+    margin-bottom: 30px;
+    color: #333;
+}
+
+.vereador-card {
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.vereador-foto-container {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-bottom: 10px;
+    background-color: #ccc; /* Placeholder background */
+}
+
+.vereador-foto {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.vereador-nome {
+    font-weight: bold;
+    margin-bottom: 5px;
+    font-size: 1.1em;
+}
+
+.vereador-titulo {
+    font-size: 0.9em;
+    color: #666;
+}
+
+/* 4. Rodapé */
+.footer {
+    background-color: #0d47a1; /* Azul escuro, cor similar ao da imagem */
+    color: white;
+    padding: 40px 20px 10px;
+    text-align: left;
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: 1.5fr 2fr 1.5fr 1fr;
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto 30px;
+}
+
+.footer-logo {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.footer-logo p {
+    font-weight: bold;
+    margin-top: 5px;
+}
+
+.footer-contact p, .footer-links ul {
+    font-size: 0.9em;
+    line-height: 1.6;
+}
+
+.footer-links ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-links h4, .footer-contact h4 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: #ffc107; /* Amarelo de destaque */
+}
+
+.footer-app-links {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 15px;
+}
+
+.app-badges img {
+    width: 130px;
+    margin-bottom: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.qr-code img {
+    width: 100px;
+    height: 100px;
+    background-color: white;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.footer-bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    padding-top: 10px;
+    text-align: center;
+    font-size: 0.8em;
+}
+
+/* Media Queries para Responsividade */
+@media (max-width: 1024px) {
+    .services-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .footer-content {
+        grid-template-columns: repeat(2, 1fr);
+        text-align: left;
+    }
+    .footer-app-links {
+        align-items: flex-start;
+    }
+}
+
+@media (max-width: 600px) {
+    .services-grid {
+        grid-template-columns: 1fr;
+    }
+    .footer-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+    .footer-logo, .footer-contact, .footer-links, .footer-app-links {
+        align-items: center;
+    }
+}
