@@ -17,6 +17,8 @@ import Procon from './pages/pagesUser/realizarReclamacaoProcon';
 import ProconAtendimentos from './pages/pagesUser/ProconAtendimentos';
 import AtendimentoJuridico from './pages/pagesUser/AtendimentoJuridico';
 import NovoAtendimentoJuridico from './pages/pagesUser/NovoAtendimentoJuridico';
+import BalcaoCidadao from './pages/pagesUser/BalcaoCidadao';
+import NovoBalcaoCidadao from './pages/pagesUser/NovoBalcaoCidadao';
 
 function App() {
   return (
@@ -35,6 +37,8 @@ function App() {
           <Route path="/procon-atendimentos" element={<ProconAtendimentos />} />
           <Route path="/juridico" element={<AtendimentoJuridico />} />
           <Route path="/juridico/novo" element={<NovoAtendimentoJuridico />} />
+          <Route path="/balcao" element={<BalcaoCidadao />} />
+          <Route path="/balcao/novo" element={<NovoBalcaoCidadao />} />
         </Routes>
       </Router>
     </AuthProvider>
