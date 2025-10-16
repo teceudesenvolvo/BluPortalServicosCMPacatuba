@@ -6,7 +6,7 @@ import Sidebar from '../../components/Sidebar';
 import { ref, get, query, orderByChild, equalTo, onValue } from 'firebase/database';
 
 // Ícones
-import { LiaUserAstronautSolid, LiaPlusSolid, LiaTimesSolid } from "react-icons/lia";
+import { LiaPlusSolid, LiaTimesSolid } from "react-icons/lia";
 
 // Componente Modal para exibir detalhes
 const ManifestacaoModal = ({ manifestacao, onClose }) => {
