@@ -19,6 +19,8 @@ import AtendimentoJuridico from './pages/pagesUser/AtendimentoJuridico';
 import NovoAtendimentoJuridico from './pages/pagesUser/NovoAtendimentoJuridico';
 import BalcaoCidadao from './pages/pagesUser/BalcaoCidadao';
 import NovoBalcaoCidadao from './pages/pagesUser/NovoBalcaoCidadao';
+import Ouvidoria from './pages/pagesUser/Ouvidoria';
+import NovaOuvidoria from './pages/pagesUser/NovaOuvidoria';
 
 function App() {
   return (
@@ -39,6 +41,8 @@ function App() {
           <Route path="/juridico/novo" element={<NovoAtendimentoJuridico />} />
           <Route path="/balcao" element={<BalcaoCidadao />} />
           <Route path="/balcao/novo" element={<NovoBalcaoCidadao />} />
+          <Route path="/ouvidoria" element={<Ouvidoria />} />
+          <Route path="/ouvidoria/nova" element={<NovaOuvidoria />} />
         </Routes>
       </Router>
     </AuthProvider>
