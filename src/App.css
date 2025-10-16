@@ -1447,8 +1447,610 @@
         width: 100%;
     }
 }
+/* Página Atendimento Jurídico */
+
+.dashboard-layout {
+    display: flex;
+    min-height: 100vh;
+}
+.btn-send-solicita {
+    background-color: #007bff; /* Azul principal */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.2s, transform 0.1s;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btn-send-solicita:hover {
+    background-color: #0056b3;
+    transform: translateY(-1px);
+}
+
+.btn-secondary {
+    background-color: #f0f4f8; /* Cinza claro ou branco para secundário */
+    color: #1f2937;
+    padding: 10px 20px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.2s;
+    display: flex;
+    align-items: center;
+}
+
+.btn-secondary:hover {
+    background-color: #e5e7eb;
+}
+
+.btn-danger {
+    background-color: #dc3545; /* Vermelho para ações de risco/logout */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.2s;
+    display: flex;
+    align-items: center;
+}
+
+.btn-danger:hover {
+    background-color: #c82333;
+}
+
+/* -------------------
+ * Barra de Ações (Page Actions)
+ * ------------------- */
+.page-actions-bar {
+    padding: 20px 40px;
+    display: flex;
+    justify-content: flex-end; /* Alinha o botão à direita como no Procon */
+    gap: 15px;
+    margin-bottom: 20px;
+}
 
 
+/* -------------------
+ * Estilos da Lista de Dados (AtendimentoJuridico)
+ * ------------------- */
+
+.data-list-container {
+    flex-grow: 1;
+    padding: 0 40px 40px 40px;
+}
+
+.data-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 15px;
+}
+
+/* Estilo para cada item da lista (card) */
+.data-list-item {
+    background-color: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    transition: transform 0.1s;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid #e5e7eb;
+    cursor: pointer;
+}
+
+.data-list-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.item-main-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.item-main-info strong {
+    font-size: 1.1rem;
+    color: #1f2937;
+    margin-bottom: 5px;
+}
+
+.item-main-info span {
+    font-size: 0.85rem;
+    color: #6b7280;
+}
+
+.item-status {
+    flex-shrink: 0;
+}
+
+.status-badge {
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+/* Cores dos Status */
+.status-pending {
+    background-color: #ffedc3; /* Amarelo Claro */
+    color: #a0522d; /* Marrom escuro */
+}
+
+.status-in-progress {
+    background-color: #d1e7ff; /* Azul Claro */
+    color: #007bff; /* Azul Principal */
+}
+
+.status-completed {
+    background-color: #d4edda; /* Verde Claro */
+    color: #155724; /* Verde Escuro */
+}
+
+.error-message {
+    color: #dc3545;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    padding: 15px;
+    border-radius: 8px;
+    margin: 20px 0;
+    text-align: center;
+}
+
+/* -------------------
+ * Estilos Responsivos (Sidebar em Mobile)
+ * ------------------- */
+@media (max-width: 768px) {
+    .dashboard-layout {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        height: auto;
+        flex-direction: row; /* Sidebar como barra horizontal no mobile */
+        justify-content: space-around;
+        padding: 0;
+        overflow-x: auto;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        position: sticky;
+        top: 0;
+        z-index: 10;
+    }
+
+    .sidebar div[style] { /* Esconde o logo */
+        display: none;
+    }
+
+    .sidebar-item {
+        padding: 10px 15px;
+        flex-direction: column;
+        text-align: center;
+        flex-shrink: 0;
+        font-size: 0.75rem;
+    }
+
+    .sidebar-icon {
+        margin-right: 0;
+        margin-bottom: 5px;
+    }
+    
+    .sidebar-item.active {
+        border-left: none;
+        border-bottom: 3px solid #ffcc00;
+        padding-left: 15px;
+    }
+
+    .content-header, .page-actions-bar, .data-list-container {
+        padding: 15px 20px;
+    }
+    
+    .data-list-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    .item-status {
+        align-self: flex-end;
+    }
+
+    .page-actions-bar {
+        justify-content: center;
+    }
+}
+
+.page-actions-bar {
+    padding: 20px 40px;
+    display: flex;
+    justify-content: flex-end; /* Alinha o botão à direita como no Procon */
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+
+/* -------------------
+ * Estilos da Lista de Dados (AtendimentoJuridico)
+ * ------------------- */
+
+.data-list-container {
+    flex-grow: 1;
+    padding: 0 40px 40px 40px;
+}
+
+.data-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 15px;
+}
+
+/* Estilo para cada item da lista (card) */
+.data-list-item {
+    background-color: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    transition: transform 0.1s;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid #e5e7eb;
+    cursor: pointer;
+}
+
+.data-list-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.item-main-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.item-main-info strong {
+    font-size: 1.1rem;
+    color: #1f2937;
+    margin-bottom: 5px;
+}
+
+.item-main-info span {
+    font-size: 0.85rem;
+    color: #6b7280;
+}
+
+.item-status {
+    flex-shrink: 0;
+}
+
+.status-badge {
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+/* Cores dos Status */
+.status-pending {
+    background-color: #ffedc3; /* Amarelo Claro */
+    color: #a0522d; /* Marrom escuro */
+}
+
+.status-in-progress {
+    background-color: #d1e7ff; /* Azul Claro */
+    color: #007bff; /* Azul Principal */
+}
+
+.status-completed {
+    background-color: #d4edda; /* Verde Claro */
+    color: #155724; /* Verde Escuro */
+}
+
+.error-message, .success-message {
+    padding: 15px;
+    border-radius: 8px;
+    margin: 20px 0;
+    text-align: center;
+    font-weight: 600;
+}
+
+.error-message {
+    color: #dc3545;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+}
+
+.success-message {
+    color: #155724;
+    background-color: #d4edda;
+    border: 1px solid #c3e6cb;
+}
+
+
+/* ===========================
+ * NOVOS ESTILOS DE FORMULÁRIO
+ * =========================== */
+
+.form-description {
+    padding: 0 40px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    color: #4b5563;
+    font-size: 0.95rem;
+}
+
+.form-container {
+    padding: 0 40px 40px 40px;
+}
+
+.form-container form {
+    background-color: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.form-row {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    flex: 1;
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="tel"],
+.form-group select,
+.form-group textarea {
+    width: 96%;
+    padding: 10px 15px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    color: #374151;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    -webkit-appearance: none; /* Garante estilo uniforme para select */
+    -moz-appearance: none;
+    appearance: none;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+    outline: none;
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+/* Estilo para o campo select (adiciona a seta de dropdown) */
+.form-group select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%236B7280'%3E%3Cpath fill-rule='evenodd' d='M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z' clip-rule='evenodd'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    padding-right: 30px;
+}
+
+/* Ações do Formulário (Botões) */
+.form-actions {
+    display: flex;
+    justify-content: flex-end; /* Alinhamento à direita para "Enviar" */
+    gap: 15px;
+    margin-top: 30px;
+}
+
+.btn-submit {
+    background-color: #0d1e57; /* Azul escuro principal */
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 700;
+    transition: background-color 0.2s;
+    display: flex;
+    align-items: center;
+}
+
+.btn-submit:hover:not(:disabled) {
+    background-color: #0b1a47;
+}
+
+.btn-submit:disabled {
+    background-color: #9ca3af;
+    cursor: not-allowed;
+}
+
+
+/* -------------------
+ * Estilos Responsivos (Sidebar em Mobile)
+ * ------------------- */
+@media (max-width: 768px) {
+    .dashboard-layout {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        height: auto;
+        flex-direction: row; /* Sidebar como barra horizontal no mobile */
+        justify-content: space-around;
+        padding: 0;
+        overflow-x: auto;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        position: sticky;
+        top: 0;
+        z-index: 10;
+    }
+
+    .sidebar div[style] { /* Esconde o logo */
+        display: none;
+    }
+
+    .sidebar-item {
+        padding: 10px 15px;
+        flex-direction: column;
+        text-align: center;
+        flex-shrink: 0;
+        font-size: 0.75rem;
+    }
+
+    .sidebar-icon {
+        margin-right: 0;
+        margin-bottom: 5px;
+    }
+    
+    .sidebar-item.active {
+        border-left: none;
+        border-bottom: 3px solid #ffcc00;
+        padding-left: 15px;
+    }
+
+    .content-header, .page-actions-bar, .data-list-container, .form-container, .form-description {
+        padding: 15px 20px;
+    }
+    
+    /* Layouts do Formulário em Mobile */
+    .form-row {
+        flex-direction: column;
+        gap: 0;
+        margin-bottom: 0;
+    }
+    .form-group {
+        margin-bottom: 15px;
+    }
+    
+    .data-list-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    .item-status {
+        align-self: flex-end;
+    }
+
+    .page-actions-bar {
+        justify-content: center;
+    }
+
+    .form-actions {
+        flex-direction: column-reverse; /* Voltar em cima, Enviar embaixo */
+        gap: 10px;
+        margin-top: 20px;
+    }
+    
+    .form-actions button {
+        width: 100%;
+        justify-content: center;
+    }
+}
+/* Estilos para o Modal */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: white;
+    padding: 20px 30px;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 600px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    animation: slide-down 0.3s ease-out;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.modal-header h3 {
+    margin: 0;
+    font-size: 1.25rem;
+}
+
+.modal-close-btn {
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #555;
+}
+
+.modal-body .detail-item {
+    margin-bottom: 10px;
+    font-size: 0.95rem;
+}
+
+.modal-body .detail-item strong {
+    color: #333;
+}
+
+.modal-body .detail-description {
+    background-color: #f9f9f9;
+    border: 1px solid #eee;
+    padding: 10px;
+    border-radius: 4px;
+    margin-top: 5px;
+    white-space: pre-wrap; /* Mantém a formatação do texto */
+}
+
+@keyframes slide-down {
+    from {
+        transform: translateY(-30px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
 
 
 

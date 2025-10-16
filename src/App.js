@@ -15,6 +15,8 @@ import Perfil from './pages/Perfil';
 import Painel from './pages/pagesUser/Painel';
 import Procon from './pages/pagesUser/realizarReclamacaoProcon';
 import ProconAtendimentos from './pages/pagesUser/ProconAtendimentos';
+import AtendimentoJuridico from './pages/pagesUser/AtendimentoJuridico';
+import NovoAtendimentoJuridico from './pages/pagesUser/NovoAtendimentoJuridico';
 
 function App() {
   return (
@@ -31,6 +33,8 @@ function App() {
           <Route path="/dashboard" element={<Painel />} />
           <Route path="/procon" element={<Procon />} />
           <Route path="/procon-atendimentos" element={<ProconAtendimentos />} />
+          <Route path="/juridico" element={<AtendimentoJuridico />} />
+          <Route path="/juridico/novo" element={<NovoAtendimentoJuridico />} />
         </Routes>
       </Router>
     </AuthProvider>
