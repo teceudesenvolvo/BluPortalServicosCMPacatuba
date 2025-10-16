@@ -66,7 +66,8 @@ const VereadoresSlider = () => {
     return (
         <div className="vereadores-section">
             <h3 className="section-title">Nossos Vereadores</h3>
-            <Splide options={splideOptions}>
+            {vereadores && Array.isArray(vereadores) && vereadores.length > 0 && (
+            <Splide options={splideOptions}>  
                 {vereadores.map((v, index) => (
                     <SplideSlide key={index}>
                         <VereadorCard
@@ -77,6 +78,7 @@ const VereadoresSlider = () => {
                     </SplideSlide>
                 ))}
             </Splide>
+            )}
         </div>
     );
 };
