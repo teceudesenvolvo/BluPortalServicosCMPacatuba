@@ -8,6 +8,11 @@ import { AuthProvider } from './contexts/FirebaseAuthContext';
 // Importa as páginas
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/Login';
+import CadastroPage from './pages/Cadastro';
+
+// Páginas Usuário Comum
+import Painel from './pages/pagesUser/Painel';
+import Procon from './pages/pagesUser/realizarReclamacaoProcon';
 
 function App() {
   return (
@@ -15,9 +20,13 @@ function App() {
     <AuthProvider>
       <Router>
         <Routes>
+          {/* Sem Login */}
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
-          {/* Adicione outras rotas aqui, como /cadastro ou /dashboard */}
+          <Route path="/cadastro" element={<CadastroPage />} />
+
+          <Route path="/dashboard" element={<Painel />} />
+          <Route path="/procon" element={<Procon />} />
         </Routes>
       </Router>
     </AuthProvider>

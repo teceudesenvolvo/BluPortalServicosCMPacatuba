@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect, useMemo } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../firebase'; // Importa a instância do auth
 
@@ -26,14 +26,19 @@ export function AuthProvider({ children }) {
         return unsubscribe;
     }, []);
 
-    const value = {
+    const value = useMemo(() => ({
         currentUser,
-        // Você pode adicionar funções como signup, logout, etc. aqui
-    };
+        loading, // Exporta o estado de loading para os consumidores do contexto
+        // Você pode adicionar funções como logout aqui
+    }), [currentUser, loading]);
+
+    if (loading) {
+        return <div className="loading-full-screen">Carregando...</div>;
+    }
 
     return (
         <AuthContext.Provider value={value}>
-            {!loading && children}
+            {children}
         </AuthContext.Provider>
     );
 }
