@@ -1,5 +1,7 @@
 @import '@splidejs/react-splide/css';
-
+body{
+  overflow-x: hidden;
+}
 .App {
   text-align: center;
 }
@@ -19,11 +21,9 @@
 /* 1. Header Principal */
 .main-header {
   background: #00128A;
-  /* Imagem de fundo da Câmara */
   background-size: cover;
   background-position: center;
-  height: 550px;
-  /* Ajuste a altura conforme necessário */
+  height: 750px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -45,7 +45,13 @@
 
 .header-subtitle {
   font-size: 1.1em;
-  margin-bottom: 30px;
+  margin-bottom: 50px;
+}
+
+
+.header-subtitle-top {
+  font-size: 1.1em;
+  margin-bottom: -20px;
 }
 
 .header-actions {
@@ -71,8 +77,8 @@
   opacity: 0.7;
 }
 
-.btn-primary,
-.btn-secondary {
+.btn-home-entrar,
+.btn-home-cadastrar {
   padding: 12px 30px;
   border-radius: 4px;
   font-size: 1em;
@@ -81,24 +87,24 @@
   width: 150px;
 }
 
-.btn-primary {
+.btn-home-entrar {
   background-color: #feb700;
   /* Azul da imagem */
   color: #000000;
   border: none;
 }
 
-.btn-primary:hover {
+.btn-home-entrar:hover {
   background-color: #cc9902;
 }
 
-.btn-secondary {
+.btn-home-cadastrar {
   background-color: transparent;
   color: white;
   border: 1px solid #ffc107;
 }
 
-.btn-secondary:hover {
+.btn-home-cadastrar:hover {
   background-color: #ffc107;
   color: #333;
 }
@@ -109,7 +115,7 @@
 
 /* 2. Seção de Serviços (Grid) */
 .services-grid-section {
-  padding: 40px 20px;
+  padding: 150px 20px 80px 20px;
 }
 
 .services-grid {
@@ -121,7 +127,7 @@
 }
 
 .service-btn {
-  background-color: #e0e0e0;
+  background-color: #D9D9D9;
   /* Cinza claro da imagem */
   border: none;
   padding: 30px 10px;
@@ -141,26 +147,27 @@
 }
 
 .service-icon {
-  font-size: 3em;
+  font-size: 4em;
+  font-weight:500;
   margin-bottom: 5px;
+  color: #5A5A5A;
 }
 
 .service-title {
   margin: 0;
   font-weight: bold;
-  color: #555;
+  color: #5A5A5A;
 }
 
 /* 3. Slider de Vereadores */
 .vereadores-slider-section {
-  padding: 40px 20px 80px;
-  background-color: #f7f7f7;
+  padding: 80px 20px 200px 20px;
 }
 
-.section-title {
-  font-size: 1.8em;
-  margin-bottom: 30px;
-  color: #333;
+.section-title-vereadores {
+  font-size: 18px;
+  margin-bottom: 60px !important;
+  color: #8d8d8d;
 }
 
 .vereador-card {

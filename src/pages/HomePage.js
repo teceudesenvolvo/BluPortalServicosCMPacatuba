@@ -46,11 +46,12 @@ const HomePage = () => {
             <header className="main-header">
                 <img src={Foto} alt="Capa" className="header-bg-image" />
                 <div className="header-overlay">
+                    <p className="header-subtitle-top">Câmara Municipal de Pacatuba - CE</p>
                     <h1 className="header-title">Bem vindo ao Portal de Serviços</h1>
-                    <p className="header-subtitle">Seu acesso fácil e rápido ao Poder Legislativo Municipal.</p>
+                        <p className="header-subtitle">Seu acesso fácil e rápido ao Poder Legislativo Municipal.</p>
                     <div className="header-actions">
-                        <button className="btn-primary" onClick={() => navigate('/login')}>Entrar</button>
-                        <button className="btn-secondary" onClick={() => navigate('/cadastro')}>Cadastrar</button>
+                        <button className="btn-home-entrar" onClick={() => navigate('/login')}>Entrar</button>
+                        <button className="btn-home-cadastrar" onClick={() => navigate('/cadastro')}>Cadastrar</button>
                     </div>
                 </div>
             </header>
