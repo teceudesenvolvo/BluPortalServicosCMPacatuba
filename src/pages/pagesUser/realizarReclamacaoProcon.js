@@ -8,16 +8,6 @@ import { useAuth } from '../../contexts/FirebaseAuthContext';
 import { db } from '../../firebase';
 import Sidebar from '../../components/Sidebar'; // Importa o componente Sidebar real
 
-import {
-    LiaHomeSolid,
-    LiaBookOpenSolid,
-    LiaBalanceScaleLeftSolid,
-    LiaUserFriendsSolid,
-    LiaUserAstronautSolid,
-    LiaFemaleSolid,
-    LiaUsersSolid,
-} from "react-icons/lia";
-
 pdfMake.vfs = pdfFonts.vfs;
 
 
@@ -61,18 +51,6 @@ const AddProducts = () => {
 
     const navigate = useNavigate();
     const { currentUser: user, loading: loadingAuth } = useAuth(); // Usando o hook de autenticação
-
-    // Itens do menu para o Sidebar
-    const menuItems = [
-        { title: 'Início', icon: <LiaHomeSolid />, path: '/dashboard' },
-        { title: 'Procon', icon: <LiaBookOpenSolid />, path: '/procon', isActive: true },
-        { title: 'Atendimento Jurídico', icon: <LiaBalanceScaleLeftSolid />, path: '/juridico' },
-        { title: 'Balcão do Cidadão', icon: <LiaUserFriendsSolid />, path: '/balcao' },
-        { title: 'Ouvidoria', icon: <LiaUserAstronautSolid />, path: '/ouvidoria' },
-        { title: 'Procuradoria da Mulher', icon: <LiaFemaleSolid />, path: '/procuradoria' },
-        { title: 'Vereadores', icon: <LiaUsersSolid />, path: '/vereadorestodos' },
-        { title: 'Perfil', icon: <LiaUsersSolid />, path: '/perfil' },
-    ];
 
     const handleMenuItemClick = (path) => {
         navigate(path);
@@ -293,7 +271,7 @@ const AddProducts = () => {
     // Conteúdo Principal
     return (
         <div className="dashboard-layout">
-            <Sidebar menuItems={menuItems} onItemClick={handleMenuItemClick} />
+            <Sidebar onItemClick={handleMenuItemClick} />
             <div className="dashboard-content">
                 
                 {/* Cabeçalho da Imagem */}

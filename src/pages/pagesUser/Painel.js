@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/FirebaseAuthContext'; // Para obter dados do usuário
 import Sidebar from '../../components/Sidebar'; 
 import {
-    LiaHomeSolid,
+    
     LiaBookOpenSolid,
     LiaBalanceScaleLeftSolid,
     LiaUserFriendsSolid,
@@ -34,18 +34,6 @@ const DashboardPage = () => {
     const userName = user?.name || user?.email || 'Cidadão';
     const userType = 'Cidadão'; // Pode ser buscado no Firestore
 
-    // 1. Dados do Menu Lateral (Sidebar)
-    const menuItems = [
-        { title: 'Início', icon: <LiaHomeSolid />, path: '/dashboard', isActive: true },
-        { title: 'Procon', icon: <LiaBookOpenSolid />, path: '/procon' },
-        { title: 'Atendimento Jurídico', icon: <LiaBalanceScaleLeftSolid />, path: '/juridico' },
-        { title: 'Balcão do Cidadão', icon: <LiaUserFriendsSolid />, path: '/balcao' },
-        { title: 'Ouvidoria', icon: <LiaUserAstronautSolid />, path: '/ouvidoria' },
-        { title: 'Procuradoria da Mulher', icon: <LiaFemaleSolid />, path: '/procuradoria' },
-        { title: 'Vereadores', icon: <LiaUsersSolid />, path: '/vereadorestodos' },
-        { title: 'Perfil', icon: <LiaUsersSolid />, path: '/perfil' },
-    ];
-    
     // 2. Dados do Grid de Serviços (Principais)
     // O ideal é que o path reflita o ítem do menu lateral
     const serviceGridItems = [
@@ -81,7 +69,7 @@ const DashboardPage = () => {
         <div className="dashboard-layout">
             
             {/* 1. Sidebar Fixo */}
-            <Sidebar menuItems={menuItems} onItemClick={handleMenuItemClick} />
+            <Sidebar onItemClick={handleMenuItemClick} />
 
             {/* 2. Conteúdo Principal */}
             <div className="dashboard-content">

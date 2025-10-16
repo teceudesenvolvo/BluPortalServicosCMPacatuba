@@ -13,6 +13,7 @@ import CadastroPage from './pages/Cadastro';
 // Páginas Usuário Comum
 import Painel from './pages/pagesUser/Painel';
 import Procon from './pages/pagesUser/realizarReclamacaoProcon';
+import ProconAtendimentos from './pages/pagesUser/ProconAtendimentos';
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
 
           <Route path="/dashboard" element={<Painel />} />
           <Route path="/procon" element={<Procon />} />
+          <Route path="/procon-atendimentos" element={<ProconAtendimentos />} />
         </Routes>
       </Router>
     </AuthProvider>

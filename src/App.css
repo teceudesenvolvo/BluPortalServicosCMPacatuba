@@ -951,8 +951,280 @@
   }
 }
 
+/* Página Atendimentos */
 
 
+
+.dashboard-content {
+  flex-grow: 1;
+  padding: 20px 30px;
+}
+
+.page-header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+  padding: 20px 0;
+}
+
+.header-title-section h1 {
+  font-size: 1.8rem;
+  margin: 0 0 5px 0;
+  color: #1f2937;
+}
+
+.header-title-section p {
+  font-size: 1rem;
+  margin: 0;
+  color: #6b7280;
+}
+
+.user-info-section {
+  text-align: right;
+}
+
+.user-info-section .name {
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.user-info-section .type {
+  font-size: 0.9rem;
+  color: #6b7280;
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  background-color: #1e3a8a;
+  border-radius: 50%;
+  display: inline-block;
+  margin-left: 10px;
+}
+
+.complaint-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 25px;
+  margin-top: 20px;
+}
+
+.card {
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  padding: 20px;
+  transition: transform 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+  border: 1px solid #e5e7eb;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.12);
+}
+
+.card.new-complaint {
+  background-color: #f7f9ff;
+  border: 2px dashed #a8c0ff;
+  color: #1e3a8a;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-height: 150px;
+  padding: 40px 20px;
+}
+
+.card.new-complaint .icon-plus {
+  font-size: 2.5rem;
+  border: 2px solid #1e3a8a;
+  border-radius: 50%;
+  padding: 8px;
+  margin-bottom: 10px;
+}
+
+.card-title {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #6b7280;
+  margin-bottom: 5px;
+}
+
+.card-protocol {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 15px;
+}
+
+.card-detail-item {
+  font-size: 0.9rem;
+  margin-bottom: 5px;
+}
+
+.card-detail-item strong {
+  color: #3b82f6;
+  font-weight: 600;
+  margin-right: 5px;
+}
+
+.card-link {
+  display: block;
+  margin-top: 15px;
+  font-size: 0.85rem;
+  color: #1e3a8a;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.status-badge.analise {
+  background-color: #fef3c7;
+  color: #b45309;
+}
+
+.status-badge.aberto {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+
+.status-badge.concluido {
+  background-color: #e0f2f1;
+  color: #00796b;
+}
+
+.status-badge.fechado {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+
+.loading-full-screen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  width: 100%;
+  font-size: 1.5rem;
+  color: #3b82f6;
+  flex-direction: column;
+  text-align: center;
+}
+
+/* Modal Styles */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 12px;
+  padding: 30px;
+  width: 90%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+.modal-close-button {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #4b5563;
+}
+
+.modal-title {
+  font-size: 1.8rem;
+  color: #1e3a8a;
+  margin-top: 0;
+  margin-bottom: 20px;
+}
+
+.modal-section-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin-top: 25px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 5px;
+}
+
+.modal-detail-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 5px 0;
+  border-bottom: 1px dotted #e5e7eb;
+}
+
+.modal-detail-row:last-child {
+  border-bottom: none;
+}
+
+.modal-detail-label {
+  font-weight: 500;
+  color: #6b7280;
+}
+
+.modal-detail-value {
+  font-weight: 600;
+  color: #1f2937;
+  text-align: right;
+}
+
+.modal-description {
+  white-space: pre-wrap;
+  background-color: #f4f6f9;
+  padding: 15px;
+  border-radius: 8px;
+  margin-top: 10px;
+}
+
+@media (max-width: 768px) {
+  .dashboard-layout {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    height: auto;
+    padding: 10px 0;
+  }
+
+  .header-title-section h1 {
+    font-size: 1.5rem;
+  }
+
+  .user-info-section {
+    display: none;
+  }
+
+}
 
 
 
