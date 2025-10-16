@@ -33,7 +33,7 @@ const DashboardPage = () => {
     
     // Estados para os dados do perfil do usuário
     const [loggedInUserData, setLoggedInUserData] = useState(null);
-    const [loadingLoggedInUserData, setLoadingLoggedInUserData] = useState(true);
+    const [, setLoadingLoggedInUserData] = useState(true);
     
     // 2. Dados do Grid de Serviços (Principais)
     // O ideal é que o path reflita o ítem do menu lateral
@@ -87,18 +87,11 @@ const DashboardPage = () => {
         fetchUserProfile();
     }, [fetchUserProfile]); // fetchUserProfile é uma função memorizada, então é seguro usá-la aqui
 
-    if (loading) {
-        return <div className="loading-full-screen">Carregando Dashboard...</div>;
-    }
-
     // Se a rota for protegida (ProtectedRoute no App.js), não é necessário 
     // verificar o usuário aqui, mas é uma boa prática.
     if (!user) {
         navigate('/login', { replace: true }); // Redireciona se não houver usuário
         return null;
-    }
-    if (loadingLoggedInUserData) {
-        return <div className="loading-full-screen">Carregando perfil do usuário...</div>;
     }
 
     return (

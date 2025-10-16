@@ -17,7 +17,7 @@ const AddProducts = () => {
 
     // Dados do usuário logado (cujo userId/uid está no localStorage)
     const [loggedInUserData, setLoggedInUserData] = useState(null);
-    const [loadingLoggedInUserData, setLoadingLoggedInUserData] = useState(true);
+    const [, setLoadingLoggedInUserData] = useState(true);
 
     const [reclamacaoFormData, setReclamacaoFormData] = useState({
         tipoReclamacao: '',
@@ -272,13 +272,6 @@ const AddProducts = () => {
         }
     };
 
-
-
-    if (loadingLoggedInUserData || loadingAuth) {
-        return (
-            <div className="loading-full-screen">Carregando...</div>
-        );
-    }
 
     // Conteúdo Principal
     return (

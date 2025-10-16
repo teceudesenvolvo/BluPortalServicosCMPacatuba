@@ -127,7 +127,7 @@ const ComplaintDetailsModal = ({ complaint, onClose }) => {
 
 const ProconAtendimento = () => {
     const navigate = useNavigate();
-    const { currentUser: user, loading: loadingAuth } = useAuth();
+    const { currentUser: user } = useAuth();
     
     // ESTADOS ESPECÍFICOS DE ATENDIMENTO
     const [complaints, setComplaints] = useState([]);
@@ -136,7 +136,7 @@ const ProconAtendimento = () => {
     const [selectedComplaint, setSelectedComplaint] = useState(null);
     // Adiciona o estado para os dados do perfil do usuário
     const [loggedInUserData, setLoggedInUserData] = useState(null);
-    const [loadingLoggedInUserData, setLoadingLoggedInUserData] = useState(true);
+    const [, setLoadingLoggedInUserData] = useState(true);
     
     const handleNavigation = (path) => {
         navigate(path);
@@ -215,12 +215,6 @@ const ProconAtendimento = () => {
         setSelectedComplaint(null);
     };
 
-
-    if (loadingAuth || loadingLoggedInUserData) {
-        return (
-            <div className="loading-full-screen">Carregando...</div>
-        );
-    }
 
     if (error) {
         return (
