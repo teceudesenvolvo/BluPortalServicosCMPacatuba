@@ -9,6 +9,7 @@ import {
     LiaUserAstronautSolid,
     LiaFemaleSolid,
     LiaUsersSolid,
+    LiaUser,
 } from "react-icons/lia";
 
 // --- Componente: Ítem do Menu Lateral (interno ao Sidebar) ---
@@ -35,7 +36,7 @@ const Sidebar = ({ onItemClick }) => {
         { title: 'Ouvidoria', icon: <LiaUserAstronautSolid />, path: '/ouvidoria' },
         { title: 'Procuradoria da Mulher', icon: <LiaFemaleSolid />, path: '/procuradoria' },
         { title: 'Vereadores', icon: <LiaUsersSolid />, path: '/vereadorestodos' },
-        { title: 'Perfil', icon: <LiaUsersSolid />, path: '/perfil' },
+        { title: 'Perfil', icon: <LiaUser />, path: '/perfil' },
     ];
 
     return (

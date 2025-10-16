@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { ref, set } from 'firebase/database';
 
 // Importa o hook de autenticação e a instância do auth
 import { useAuth } from '../contexts/FirebaseAuthContext';
-import { auth } from '../firebase';
+import { auth, db } from '../firebase';
 
 import Brasao from '../assets/logo-pacatuba.png';
 import Logo from '../assets/logo-pacatuba-azul.png';
@@ -37,7 +38,16 @@ const CadastroPage = () => {
         setLoading(true);
 
         try {
-            await createUserWithEmailAndPassword(auth, email, password);
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            const user = userCredential.user;
+
+            // Salva informações adicionais do usuário no Realtime Database
+            await set(ref(db, 'users/' + user.uid), {
+                email: user.email,
+                tipo: 'Cidadão', // Define o tipo padrão do usuário
+                createdAt: new Date().toISOString(),
+            });
+
             navigate('/dashboard', { replace: true });
         } catch (err) {
             console.error("Erro de cadastro:", err);

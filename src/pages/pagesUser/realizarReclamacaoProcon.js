@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ref, push } from 'firebase/database';
+import { ref, push, get } from 'firebase/database';
 import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
 
@@ -13,10 +13,10 @@ pdfMake.vfs = pdfFonts.vfs;
 
 const AddProducts = () => {
     // Abas: 1: Detalhes da Reclamação, 2: Anexos e Envio
-    const [activeTab, setActiveTab] = useState(1); 
+    const [activeTab, setActiveTab] = useState(1);
 
     // Dados do usuário logado (cujo userId/uid está no localStorage)
-    const [loggedInUserData, setLoggedInUserData] = useState(null); 
+    const [loggedInUserData, setLoggedInUserData] = useState(null);
     const [loadingLoggedInUserData, setLoadingLoggedInUserData] = useState(true);
 
     const [reclamacaoFormData, setReclamacaoFormData] = useState({
@@ -60,21 +60,33 @@ const AddProducts = () => {
     const fetchUserData = useCallback(async () => {
         if (loadingAuth) return;
 
-        const userId = user?.uid; 
+        const userId = user?.uid;
         if (!userId) {
             navigate('/login');
             return;
         }
-        
-        // Como o Firestore foi removido, usamos apenas os dados básicos do Auth.
-        // Se precisar de mais dados, eles teriam que vir de outra API ou do próprio Auth.
-        setLoggedInUserData({ 
-            uid: userId, 
-            nome: user.displayName || 'Usuário', 
-            email: user.email 
-        });
-        setLoadingLoggedInUserData(false);
 
+        // Busca os dados do perfil do usuário no Realtime Database
+        const userRef = ref(db, 'users/' + userId);
+        try {
+            const snapshot = await get(userRef);
+            if (snapshot.exists()) {
+                const userData = snapshot.val();
+                setLoggedInUserData({
+                    uid: userId,
+                    nome: userData.name || user.email || 'Usuário',
+                    email: user.email,
+                    tipo: userData.tipo || 'Cidadão', // Busca o tipo do banco de dados
+                });
+            } else {
+                // Caso o perfil não exista, usa dados básicos
+                setLoggedInUserData({ uid: userId, nome: user.displayName || 'Usuário', email: user.email, tipo: 'Cidadão' });
+            }
+        } catch (error) {
+            console.error("Erro ao buscar perfil do usuário:", error);
+        } finally {
+            setLoadingLoggedInUserData(false);
+        }
     }, [user, loadingAuth, navigate]);
 
     useEffect(() => {
@@ -230,7 +242,7 @@ const AddProducts = () => {
             alert('Erro: Dados do usuário logado não disponíveis.');
             return;
         }
-        
+
         // Objeto com todos os dados a serem salvos no Firestore
         const reclamacaoDataFinal = {
             ...reclamacaoFormData,
@@ -244,14 +256,14 @@ const AddProducts = () => {
             createdAt: timestamp,
             userDataAtTimeOfComplaint: loggedInUserData,
         };
-        
+
         try {
             // Envia os dados para o nó 'denuncias-procon' no Realtime Database
             await push(ref(db, 'denuncias-procon'), reclamacaoDataFinal);
-            
+
             gerarPDF(protocolo, loggedInUserData, reclamacaoFormData, empresaInfo);
             alert(`Reclamação registrada com sucesso! Protocolo: ${protocolo}`);
-            
+
             setFileInputKey(Date.now());
             navigate('/dashboard');
         } catch (error) {
@@ -260,41 +272,48 @@ const AddProducts = () => {
         }
     };
 
-    
+
 
     if (loadingLoggedInUserData || loadingAuth) {
         return (
             <div className="loading-full-screen">Carregando...</div>
         );
     }
-    
+
     // Conteúdo Principal
     return (
         <div className="dashboard-layout">
             <Sidebar onItemClick={handleMenuItemClick} />
             <div className="dashboard-content">
-                
+
                 {/* Cabeçalho da Imagem */}
-                <header className="page-header-procon">
-                    <div className="header-breadcrumbs">
-                        <span>Serviços</span> &gt; <span>PROCON</span>
+                <header className="page-header-container">
+                    <div className="header-title-section">
+                        <h1>Câmara Municipal de Pacatuba</h1>
+                        <p>Procon - Realizar Reclamação</p>
                     </div>
-                    <h2>PROCON</h2>
-                    <p>Reclamação, Denúncia e/ou Consulta</p>
+
+                    <div className="user-profile">
+                        <div className="user-text">
+                            <p className="user-name-display">{loggedInUserData?.nome || user?.email}</p>
+                            <p className="user-type-display">{loggedInUserData?.tipo || 'Cidadão'}</p>
+                        </div>
+                        <div className="user-avatar"></div> {/* Círculo Azul */}
+                    </div>
                 </header>
-                
+
                 {/* Contêiner da Reclamação */}
                 <div className="form-container-tabs">
                     <div className="tabs-header">
-                        <button 
-                            className={`tab-button ${activeTab === 1 ? 'active' : ''}`} 
+                        <button
+                            className={`tab-button ${activeTab === 1 ? 'active' : ''}`}
                             onClick={() => setActiveTab(1)}
                         >
                             1. Detalhes da Reclamação
                         </button>
-                        <button 
-                            className={`tab-button ${activeTab === 2 ? 'active' : ''}`} 
-                            onClick={() => setActiveTab(2)} 
+                        <button
+                            className={`tab-button ${activeTab === 2 ? 'active' : ''}`}
+                            onClick={() => setActiveTab(2)}
                             disabled={activeTab < 2}
                         >
                             2. Anexos e Envio
@@ -324,9 +343,9 @@ const AddProducts = () => {
                                         <option value="Demais Serviços">Demais Serviços</option>
                                     </select>
                                 </div>
-                                
+
                                 <input className="form-input" type="text" name="assuntoDenuncia" placeholder="Assunto da Denúncia" value={reclamacaoFormData.assuntoDenuncia} onChange={handleReclamacaoChange} required />
-                                
+
                                 <p className="label-section">Empresa Reclamada:</p>
                                 <div className="cnpj-group">
                                     <input className="form-input cnpj-input" type="text" name="cnpj" placeholder="Digite o CNPJ" value={reclamacaoFormData.cnpj} onChange={handleReclamacaoChange} required />
@@ -334,7 +353,7 @@ const AddProducts = () => {
                                         {loadingCnpj ? 'Buscando...' : 'Buscar Empresa'}
                                     </button>
                                 </div>
-                                
+
                                 {cnpjError && <p className="error-message-inline">{cnpjError}</p>}
                                 {empresaInfo && (
                                     <p className="company-info">
@@ -342,7 +361,7 @@ const AddProducts = () => {
                                         {empresaInfo.fantasia && ` (${empresaInfo.fantasia})`}
                                     </p>
                                 )}
-                                
+
                                 <div className="form-grid">
                                     <select name="fornecedorResolver" className="form-input" value={reclamacaoFormData.fornecedorResolver} onChange={handleReclamacaoChange} required>
                                         <option value="">Procurei o fornecedor para resolver?</option>
@@ -383,11 +402,11 @@ const AddProducts = () => {
                                         <option value="Dinheiro">Dinheiro</option>
                                     </select>
                                 </div>
-                                
+
                                 <textarea id="detalhesServico" className="form-input textarea-input" name="detalhesServico" placeholder="Detalhes do Serviço ou Produto Contratado" value={reclamacaoFormData.detalhesServico} onChange={handleReclamacaoChange} required />
 
                                 <p className="section-title">Informações Adicionais</p>
-                                
+
                                 <div className="form-grid three-cols">
                                     <select name="tipoDocumento" className="form-input" value={reclamacaoFormData.tipoDocumento} onChange={handleReclamacaoChange} required>
                                         <option value="">Tipo de Documento</option>
@@ -410,7 +429,7 @@ const AddProducts = () => {
                                         <input className="form-input" type="date" name="dataCancelamento" value={reclamacaoFormData.dataCancelamento} onChange={handleReclamacaoChange} required />
                                     </div>
                                 </div>
-                                
+
                                 <p className="section-title">Descrição e Pedido</p>
                                 <textarea id="descricao" className="form-input textarea-input large" name="descricao" placeholder="Descreva em detalhes sua reclamação (máx. 2000 caracteres)" value={reclamacaoFormData.descricao} onChange={handleReclamacaoChange} maxLength={2000} required />
                                 <select name="pedidoConsumidor" className="form-input" value={reclamacaoFormData.pedidoConsumidor} onChange={handleReclamacaoChange} required>
@@ -422,7 +441,7 @@ const AddProducts = () => {
                                     <option value="Entrega do Produto">Entrega do produto</option>
                                     <option value="Outro">Outro (Exceto indenização por danos morais)</option>
                                 </select>
-                                
+
                                 <div className="form-navigation-buttons">
                                     <button type="button" className="buttonLogin btnNext" onClick={handleNextTab}>Próximo</button>
                                 </div>
@@ -448,17 +467,17 @@ const AddProducts = () => {
                                         Selecionar Arquivos
                                     </div>
                                 </label>
-                                
+
                                 {fileCount > 0 && (
                                     <p className="file-count-message">
                                         ✅ {fileCount} arquivo(s) selecionado(s) pronto(s) para envio.
                                     </p>
                                 )}
-                                
+
                                 {fileErrors.map((error, index) => (
                                     <p key={index} className="error-message-inline">{error}</p>
                                 ))}
-                                
+
                                 <div className="form-navigation-buttons">
                                     <button type="button" className="buttonLogin btnPrev" onClick={handlePrevTab}>Anterior</button>
                                     <button type="submit" className="buttonLogin btnLogin" disabled={fileErrors.length > 0}>

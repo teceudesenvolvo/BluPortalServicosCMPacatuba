@@ -134,6 +134,9 @@ const ProconAtendimento = () => {
     const [loadingComplaints, setLoadingComplaints] = useState(true);
     const [error, setError] = useState(null);
     const [selectedComplaint, setSelectedComplaint] = useState(null);
+    // Adiciona o estado para os dados do perfil do usuário
+    const [loggedInUserData, setLoggedInUserData] = useState(null);
+    const [loadingLoggedInUserData, setLoadingLoggedInUserData] = useState(true);
     
     const handleNavigation = (path) => {
         navigate(path);
@@ -173,11 +176,35 @@ const ProconAtendimento = () => {
         }
     }, [user]);
 
+    // Busca os dados do perfil do usuário
+    const fetchUserProfile = useCallback(async () => {
+        if (!user) return;
+        const db = getDatabase();
+        const userRef = ref(db, 'users/' + user.uid);
+        try {
+            const snapshot = await get(userRef);
+            if (snapshot.exists()) {
+                const userData = snapshot.val();
+                setLoggedInUserData({
+                    uid: user.uid,
+                    nome: userData.name || user.displayName || 'Usuário',
+                    email: user.email,
+                    tipo: userData.tipo || 'Cidadão',
+                });
+            } else {
+                setLoggedInUserData({ uid: user.uid, nome: user.displayName || 'Usuário', email: user.email, tipo: 'Cidadão' });
+            }
+        } finally {
+            setLoadingLoggedInUserData(false);
+        }
+    }, [user]);
+
     useEffect(() => {
         if (user) {
             fetchComplaints();
+            fetchUserProfile();
         }
-    }, [user, fetchComplaints]);
+    }, [user, fetchComplaints, fetchUserProfile]);
 
     // Funções do Modal
     const openDetailsModal = (complaint) => {
@@ -189,7 +216,7 @@ const ProconAtendimento = () => {
     };
 
 
-    if (loadingAuth) {
+    if (loadingAuth || loadingLoggedInUserData) {
         return (
             <div className="loading-full-screen">Carregando...</div>
         );
@@ -213,17 +240,17 @@ const ProconAtendimento = () => {
             <Sidebar onItemClick={handleNavigation} />
             <div className="dashboard-content">
                 
-                {/* Cabeçalho superior (Câmera Municipal e Usuário) */}
+                {/* Cabeçalho da Imagem */}
                 <header className="page-header-container">
                     <div className="header-title-section">
                         <h1>Câmara Municipal de Pacatuba</h1>
-                        <p>Procon - Histórico de Atendimentos</p>
+                        <p>Procon - Meus Atendimentos</p>
                     </div>
 
                     <div className="user-profile">
                         <div className="user-text">
-                            <p className="user-name-display">{user?.displayName || user?.email || 'Usuário'}</p>
-                            <p className="user-type-display">Cidadão</p>
+                            <p className="user-name-display">{loggedInUserData?.nome || user?.email || 'Usuário'}</p>
+                            <p className="user-type-display">{loggedInUserData?.tipo || 'Cidadão'}</p>
                         </div>
                         <div className="user-avatar"></div> {/* Círculo Azul */}
                     </div>

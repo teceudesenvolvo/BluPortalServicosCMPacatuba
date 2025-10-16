@@ -483,6 +483,7 @@
 
 .user-text {
   text-align: right;
+  margin-right: -10px;
 }
 
 .user-name-display {
@@ -985,7 +986,7 @@
 }
 
 .user-info-section .name {
-  
+
   font-weight: 600;
   color: #1f2937;
 }

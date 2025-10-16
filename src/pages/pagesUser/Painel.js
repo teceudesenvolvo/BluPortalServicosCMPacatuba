@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/FirebaseAuthContext'; // Para obter dados do usuário
 import Sidebar from '../../components/Sidebar'; 
+import { ref, get } from 'firebase/database'; // Importa o Realtime Database
+import { db } from '../../firebase'; // Importa a instância do db
 import {
-    
     LiaBookOpenSolid,
     LiaBalanceScaleLeftSolid,
     LiaUserFriendsSolid,
@@ -29,11 +30,11 @@ const ServiceCard = ({ icon, title, path, navigate }) => {
 const DashboardPage = () => {
     const navigate = useNavigate(); 
     const { currentUser: user, loading } = useAuth(); // Corrigido: usa currentUser e o renomeia para user
-
-    // Dados do Usuário
-    const userName = user?.name || user?.email || 'Cidadão';
-    const userType = 'Cidadão'; // Pode ser buscado no Firestore
-
+    
+    // Estados para os dados do perfil do usuário
+    const [loggedInUserData, setLoggedInUserData] = useState(null);
+    const [loadingLoggedInUserData, setLoadingLoggedInUserData] = useState(true);
+    
     // 2. Dados do Grid de Serviços (Principais)
     // O ideal é que o path reflita o ítem do menu lateral
     const serviceGridItems = [
@@ -45,15 +46,46 @@ const DashboardPage = () => {
         { title: 'Procuradoria da Mulher', icon: <LiaFemaleSolid />, path: '/procuradoria' },
         // Pode adicionar mais se necessário
     ];
-
-    // Simulação da função de Logout (para um botão que você pode adicionar depois)
-    
     
     // Handler para navegação do menu lateral
     const handleMenuItemClick = (path) => {
         navigate(path);
-
     };
+
+    // Busca os dados do perfil do usuário no Realtime Database
+    const fetchUserProfile = useCallback(async () => {
+        if (loading || !user) { // Se a autenticação ainda está carregando ou não há usuário, não faz nada
+            setLoadingLoggedInUserData(false); // Garante que o loading termine se não houver usuário
+            return;
+        }
+
+        const userId = user.uid;
+        const userRef = ref(db, 'users/' + userId);
+        try {
+            const snapshot = await get(userRef);
+            if (snapshot.exists()) {
+                const userData = snapshot.val();
+                setLoggedInUserData({
+                    uid: userId,
+                    nome: userData.name || user.email || 'Usuário',
+                    email: user.email,
+                    tipo: userData.tipo || 'Cidadão', // Busca o tipo do banco de dados
+                });
+            } else {
+                // Caso o perfil não exista, usa dados básicos do Auth
+                setLoggedInUserData({ uid: userId, nome: user.displayName || 'Usuário', email: user.email, tipo: 'Cidadão' });
+            }
+        } catch (error) {
+            console.error("Erro ao buscar perfil do usuário:", error);
+            // Opcional: setar um estado de erro aqui
+        } finally {
+            setLoadingLoggedInUserData(false);
+        }
+    }, [user, loading]); // Dependências: user, loading (do AuthContext)
+
+    useEffect(() => {
+        fetchUserProfile();
+    }, [fetchUserProfile]); // fetchUserProfile é uma função memorizada, então é seguro usá-la aqui
 
     if (loading) {
         return <div className="loading-full-screen">Carregando Dashboard...</div>;
@@ -62,7 +94,11 @@ const DashboardPage = () => {
     // Se a rota for protegida (ProtectedRoute no App.js), não é necessário 
     // verificar o usuário aqui, mas é uma boa prática.
     if (!user) {
-         return null; // O ProtectedRoute já redirecionou para /login
+        navigate('/login', { replace: true }); // Redireciona se não houver usuário
+        return null;
+    }
+    if (loadingLoggedInUserData) {
+        return <div className="loading-full-screen">Carregando perfil do usuário...</div>;
     }
 
     return (
@@ -73,16 +109,17 @@ const DashboardPage = () => {
 
             {/* 2. Conteúdo Principal */}
             <div className="dashboard-content">
-                <header className="content-header">
-                    <div className="header-info">
-                        <p className="header-title-main">Câmara Municipal de Pacatuba</p>
-                        <h1 className="header-subtitle-main">Portal de Serviços</h1>
+               {/* Cabeçalho da Imagem */}
+                <header className="page-header-container">
+                    <div className="header-title-section">
+                        <h1>Câmara Municipal de Pacatuba</h1>
+                        <p>Procon - Realizar Reclamação</p>
                     </div>
-                    
+
                     <div className="user-profile">
                         <div className="user-text">
-                            <p className="user-name-display">{userName}</p>
-                            <p className="user-type-display">{userType}</p>
+                            <p className="user-name-display">{loggedInUserData?.nome || user?.email}</p>
+                            <p className="user-type-display">{loggedInUserData?.tipo || 'Cidadão'}</p>
                         </div>
                         <div className="user-avatar"></div> {/* Círculo Azul */}
                     </div>
