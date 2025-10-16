@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { ref, set } from 'firebase/database';
@@ -20,10 +20,16 @@ const CadastroPage = () => {
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
 
-    // Se o usuário já estiver logado, redireciona para o dashboard
+    // Efeito para redirecionar se o usuário já estiver logado.
+    useEffect(() => {
+        if (currentUser) {
+            navigate('/dashboard', { replace: true });
+        }
+    }, [currentUser, navigate]);
+
+    // Evita renderizar o formulário de cadastro se o usuário já estiver logado e o redirecionamento estiver prestes a acontecer.
     if (currentUser) {
-        navigate('/dashboard', { replace: true });
-        return null;
+        return <div className="loading-full-screen">Redirecionando...</div>; // Ou null
     }
 
     const handleRegister = async (e) => {

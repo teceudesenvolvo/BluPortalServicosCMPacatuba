@@ -9,6 +9,7 @@ import { AuthProvider } from './contexts/FirebaseAuthContext';
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/Login';
 import CadastroPage from './pages/Cadastro';
+import Perfil from './pages/Perfil';
 
 // Páginas Usuário Comum
 import Painel from './pages/pagesUser/Painel';
@@ -25,6 +26,7 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/cadastro" element={<CadastroPage />} />
+          <Route path="/perfil" element={<Perfil />} />
 
           <Route path="/dashboard" element={<Painel />} />
           <Route path="/procon" element={<Procon />} />

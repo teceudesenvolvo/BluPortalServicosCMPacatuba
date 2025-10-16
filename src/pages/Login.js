@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 
@@ -18,11 +18,16 @@ const LoginPage = () => {
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
 
-    // Se o usuário já estiver logado, redireciona para o dashboard
+    // Efeito para redirecionar se o usuário já estiver logado.
+    useEffect(() => {
+        if (currentUser) {
+            navigate('/dashboard', { replace: true });
+        }
+    }, [currentUser, navigate]);
+
+    // Evita renderizar o formulário de login se o usuário já estiver logado e o redirecionamento estiver prestes a acontecer.
     if (currentUser) {
-        // Redireciona o usuário para o dashboard de serviços (ex: /dashboard)
-        navigate('/dashboard', { replace: true });
-        return null;
+        return <div className="loading-full-screen">Redirecionando...</div>; // Ou null
     }
 
     const handleLogin = async (e) => {
