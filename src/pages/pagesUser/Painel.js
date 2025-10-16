@@ -37,7 +37,7 @@ const DashboardPage = () => {
     // 2. Dados do Grid de Serviços (Principais)
     // O ideal é que o path reflita o ítem do menu lateral
     const serviceGridItems = [
-        { title: 'Procon', icon: <LiaBookOpenSolid />, path: '/procon' },
+        { title: 'Procon', icon: <LiaBookOpenSolid />, path: '/procon-atendimentos' },
         { title: 'Atendimento Jurídico', icon: <LiaBalanceScaleLeftSolid />, path: '/juridico' },
         { title: 'Balcão do Cidadão', icon: <LiaUserFriendsSolid />, path: '/balcao' },
         { title: 'Ouvidoria', icon: <LiaUserAstronautSolid />, path: '/ouvidoria' },

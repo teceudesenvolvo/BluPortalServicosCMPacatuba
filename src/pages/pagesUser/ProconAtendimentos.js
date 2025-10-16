@@ -219,10 +219,13 @@ const ProconAtendimento = () => {
                         <h1>Câmara Municipal de Pacatuba</h1>
                         <p>Procon - Histórico de Atendimentos</p>
                     </div>
-                    <div className="user-info-section">
-                        <span className="name">{user?.displayName || user?.email || 'Usuário'}</span>
-                        <span className="type">Cidadão</span>
-                        <div className="user-avatar"></div>
+
+                    <div className="user-profile">
+                        <div className="user-text">
+                            <p className="user-name-display">{user?.displayName || user?.email || 'Usuário'}</p>
+                            <p className="user-type-display">Cidadão</p>
+                        </div>
+                        <div className="user-avatar"></div> {/* Círculo Azul */}
                     </div>
                 </header>
                 
