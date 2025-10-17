@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import Logo from '../assets/logo-pacatuba.png';
 import {
@@ -12,6 +12,8 @@ import {
     LiaUser,
     LiaApple,
     LiaGooglePlay,
+    LiaBarsSolid,
+    LiaTimesSolid,
 } from "react-icons/lia";
 
 // --- Componente: Ítem do Menu Lateral (interno ao Sidebar) ---
@@ -28,6 +30,7 @@ const SidebarItem = ({ icon, title, path, isActive, onClick }) => (
 // --- Componente Principal: Sidebar ---
 const Sidebar = ({ onItemClick }) => {
     const location = useLocation(); // Hook para obter a rota atual
+    const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
 
     // Itens do menu agora são definidos diretamente aqui
     const menuItems = [
@@ -41,6 +44,16 @@ const Sidebar = ({ onItemClick }) => {
         { title: 'Perfil', icon: <LiaUser />, path: '/perfil' },
     ];
 
+    const handleMobileMenuToggle = () => {
+        setMobileMenuOpen(!isMobileMenuOpen);
+    };
+
+    // Fecha o menu mobile ao clicar em um item
+    const handleMobileItemClick = (path) => {
+        onItemClick(path);
+        setMobileMenuOpen(false);
+    };
+
     return (
         <div className="dashboard-sidebar">
             <div className="sidebar-header">
@@ -50,17 +63,22 @@ const Sidebar = ({ onItemClick }) => {
                     className="sidebar-logo"
                     style={{ height: '120px', width: 'auto' }}
                 />
+                {/* Botão Hambúrguer para Mobile */}
+                <button className="sidebar-hamburger-btn" onClick={handleMobileMenuToggle}>
+                    {isMobileMenuOpen ? <LiaTimesSolid size={24} /> : <LiaBarsSolid size={24} />}
+                </button>
             </div>
 
-            <div className="sidebar-menu">
+            {/* O menu agora usa uma classe condicional para ser exibido no mobile */}
+            <div className={`sidebar-menu ${isMobileMenuOpen ? 'is-open' : ''}`}>
                 {menuItems.map((item) => (
                     <SidebarItem
                         key={item.title} // A chave continua sendo o título
                         icon={item.icon}
                         title={item.title}
                         path={item.path}
-                        isActive={location.pathname === item.path} // Determina se o item está ativo
-                        onClick={onItemClick}
+                        isActive={location.pathname === item.path}
+                        onClick={handleMobileItemClick} // Usa o novo handler
                     />
                 ))}
             </div>

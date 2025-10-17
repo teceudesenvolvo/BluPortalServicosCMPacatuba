@@ -162,7 +162,7 @@ const Procuradoria = () => {
                 <header className="page-header-container">
                     <div className="header-title-section">
                         <h1>Câmara Municipal de Pacatuba</h1>
-                        <p>Procuradoria da Mulher - Meus Atendimentos</p>
+                        <p style={{ color: '#ff15ffff' }}>Procuradoria da Mulher - Meus Atendimentos</p>
                     </div>
                     <div className="user-profile">
                         <div className="user-text">
