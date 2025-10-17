@@ -225,6 +225,13 @@ body{
   min-height: 100vh;
 }
 
+@media (max-width: 768px) {
+  .login-left-panel {
+    display: none !important;
+  }
+}
+
+
 /* Coluna Esquerda (Azul) */
 .login-left-panel {
   flex: 1;
@@ -246,7 +253,7 @@ body{
 }
 
 .brasao {
-  height: 120px;
+  height: 300px;
   margin-bottom: 20px;
 }
 

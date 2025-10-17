@@ -70,7 +70,6 @@ const LoginPage = () => {
                         src={Brasao}
                         alt="Brasão de Pacatuba"
                         className="brasao"
-                        style={{ height: '300px', marginTop: '20%' }}
                     />
                 </div>
                 <p className="developed-by">Desenvolvido por Blu Tecnologias</p>
