@@ -399,6 +399,7 @@ body{
   position: fixed;
   height: 100%;
   overflow-y: auto;
+  border-radius: 0px 20px 20px 0px;
 }
 
 .sidebar-header {
@@ -421,7 +422,7 @@ body{
   display: flex;
   align-items: center;
   padding: 12px 20px;
-  padding-left: 30px;
+  padding-left: 10px;
   /* Alinhamento visual */
   cursor: pointer;
   transition: background-color 0.2s, border-left 0.2s;
@@ -640,12 +641,6 @@ body{
   padding: 20px 0;
 }
 
-.sidebar-item {
-  padding: 12px 20px;
-  cursor: pointer;
-  font-size: 1em;
-  border-left: 5px solid transparent;
-}
 
 .sidebar-item.active {
   background-color: #0b3e8c;
@@ -1522,8 +1517,15 @@ body{
     justify-content: flex-end; /* Alinha o botão à direita como no Procon */
     gap: 15px;
     margin-bottom: 20px;
-}
+    flex-direction: row;
+    display: block;
+    align-items: flex-end;
 
+}
+.page-actions-buttons{
+    display: flex;
+    gap: 10px;
+}
 
 /* -------------------
  * Estilos da Lista de Dados (AtendimentoJuridico)
@@ -1640,15 +1642,6 @@ body{
     .sidebar div[style] { /* Esconde o logo */
         display: none;
     }
-
-    .sidebar-item {
-        padding: 10px 15px;
-        flex-direction: column;
-        text-align: center;
-        flex-shrink: 0;
-        font-size: 0.75rem;
-    }
-
     .sidebar-icon {
         margin-right: 0;
         margin-bottom: 5px;
@@ -1924,14 +1917,6 @@ body{
 
     .sidebar div[style] { /* Esconde o logo */
         display: none;
-    }
-
-    .sidebar-item {
-        padding: 10px 15px;
-        flex-direction: column;
-        text-align: center;
-        flex-shrink: 0;
-        font-size: 0.75rem;
     }
 
     .sidebar-icon {

@@ -21,6 +21,9 @@ import BalcaoCidadao from './pages/pagesUser/BalcaoCidadao';
 import NovoBalcaoCidadao from './pages/pagesUser/NovoBalcaoCidadao';
 import Ouvidoria from './pages/pagesUser/Ouvidoria';
 import NovaOuvidoria from './pages/pagesUser/NovaOuvidoria';
+import Procuradoria from './pages/pagesUser/Procuradoria';
+import NovaProcuradoria from './pages/pagesUser/NovaProcuradoria';
+import ConfigurarPanico from './pages/pagesUser/ConfigurarPanico';
 
 function App() {
   return (
@@ -43,6 +46,9 @@ function App() {
           <Route path="/balcao/novo" element={<NovoBalcaoCidadao />} />
           <Route path="/ouvidoria" element={<Ouvidoria />} />
           <Route path="/ouvidoria/nova" element={<NovaOuvidoria />} />
+          <Route path="/procuradoria" element={<Procuradoria />} />
+          <Route path="/procuradoria/nova" element={<NovaProcuradoria />} />
+          <Route path="/procuradoria/panico-config" element={<ConfigurarPanico />} />
         </Routes>
       </Router>
     </AuthProvider>
