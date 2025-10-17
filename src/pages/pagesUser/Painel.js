@@ -70,10 +70,17 @@ const DashboardPage = () => {
                     nome: userData.name || user.email || 'Usuário',
                     email: user.email,
                     tipo: userData.tipo || 'Cidadão', // Busca o tipo do banco de dados
+                    avatar: userData.avatarBase64 || null, // Adiciona o avatar ao estado
                 });
             } else {
                 // Caso o perfil não exista, usa dados básicos do Auth
-                setLoggedInUserData({ uid: userId, nome: user.displayName || 'Usuário', email: user.email, tipo: 'Cidadão' });
+                setLoggedInUserData({
+                    uid: userId,
+                    nome: user.displayName || 'Usuário',
+                    email: user.email,
+                    tipo: 'Cidadão',
+                    avatar: null,
+                });
             }
         } catch (error) {
             console.error("Erro ao buscar perfil do usuário:", error);
@@ -114,7 +121,13 @@ const DashboardPage = () => {
                             <p className="user-name-display">{loggedInUserData?.nome || user?.email}</p>
                             <p className="user-type-display">{loggedInUserData?.tipo || 'Cidadão'}</p>
                         </div>
-                        <div className="user-avatar"></div> {/* Círculo Azul */}
+                        <div className="user-avatar">
+                            {loggedInUserData?.avatar ? (
+                                <img src={`data:image/png;base64,${loggedInUserData.avatar}`} alt="Avatar do usuário" className='user-avatar' />
+                            ) : (
+                                <div className="user-avatar-placeholder" /> // Mantém um placeholder se não houver imagem
+                            )}
+                        </div>
                     </div>
                 </header>
 

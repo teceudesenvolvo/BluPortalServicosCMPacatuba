@@ -38,7 +38,9 @@ const NovoBalcaoCidadao = () => {
         try {
             const snapshot = await get(userRef);
             if (snapshot.exists()) {
-                setLoggedInUserData({ ...snapshot.val() });
+                const userData = snapshot.val();
+                // Adiciona o avatar ao estado, assim como em Painel.js
+                setLoggedInUserData({ ...userData, avatar: userData.avatarBase64 || null });
             } else {
                 setError("Seu perfil de usuário não foi encontrado. Por favor, complete seu cadastro.");
             }
@@ -114,7 +116,13 @@ const NovoBalcaoCidadao = () => {
                             <p className="user-name-display">{loggedInUserData?.name || currentUser?.email}</p>
                             <p className="user-type-display">{loggedInUserData?.tipo || 'Cidadão'}</p>
                         </div>
-                        <div className="user-avatar"></div>
+                        <div className="user-avatar">
+                            {loggedInUserData?.avatar ? (
+                                <img src={`data:image/png;base64,${loggedInUserData.avatar}`} alt="Avatar do usuário" />
+                            ) : (
+                                <div className="user-avatar-placeholder" />
+                            )}
+                        </div>
                     </div>
                 </header>
 
