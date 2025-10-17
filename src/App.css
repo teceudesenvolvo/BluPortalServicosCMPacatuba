@@ -637,6 +637,34 @@ body{
   color: #999;
 }
 
+/* Estilos para a seção de download do app no Sidebar */
+.sidebar-app-download {
+    margin-top: 100%; /* Empurra a seção para o final */
+    padding: 20px;
+    text-align: center;
+    border-top: 1px solid #ffffff34; /* Linha separadora */
+}
+
+.sidebar-app-title {
+    color: #fff;
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+}
+
+.sidebar-app-icons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.app-icon-link {
+    color: #cbd5e0;
+    transition: color 0.2s;
+}
+
+.app-icon-link:hover {
+    color: #ffffff;
+}
 
 /* Media Query: Versão Mobile/Tablet */
 @media (max-width: 900px) {

@@ -48,14 +48,14 @@ const Perfil = () => {
                 const userData = snapshot.val();
                 setProfileData({
                     uid: userId,
-                    nome: userData.nome || userAuth.displayName || 'Usuário',
+                    name: userData.name || userAuth.displayName || 'Usuário',
                     email: userAuth.email,
                     tipo: userData.tipo || 'Cidadão',
                     ...userData // Adiciona outros campos do perfil
                 });
             } else {
                 // Caso contrário, use dados básicos do Auth
-                setProfileData({ uid: userId, nome: userAuth.displayName || 'Usuário', email: userAuth.email, tipo: 'Cidadão' });
+                setProfileData({ uid: userId, name: userAuth.displayName || 'Usuário', email: userAuth.email, tipo: 'Cidadão' });
                 console.warn("Documento de perfil não encontrado no Realtime Database.");
             }
         } catch (error) {
@@ -93,7 +93,7 @@ const Perfil = () => {
         if (file) {
             const reader = new FileReader();
             reader.onloadend = () => {
-                setEditableProfileData(prev => ({ ...prev, avatarBase64: reader.result }));
+                setEditableProfileData(prev => ({ ...prev, avatar: reader.result }));
             };
             reader.readAsDataURL(file);
         }
@@ -149,6 +149,13 @@ const Perfil = () => {
         navigate(path);
     };
 
+    // Função para garantir que o avatar seja uma Data URL válida
+    const getAvatarSrc = (avatarBase64) => {
+        if (!avatarBase64) return null;
+        if (avatarBase64.startsWith('data:image')) return avatarBase64;
+        return `data:image/jpeg;base64,${avatarBase64}`; // Assume um formato padrão se o prefixo estiver faltando
+    };
+
     // *******************
     // Renderização Condicional
     // *******************
@@ -180,8 +187,8 @@ const Perfil = () => {
                         <div className="profile-summary">
                             <div className="profile-info">
                                 <div className="profile-avatar">
-                                    {editableProfileData.avatarBase64 ? (
-                                        <img src={editableProfileData.avatarBase64} alt="Avatar" className="profile-image" />
+                                    {getAvatarSrc(editableProfileData.avatarBase64) ? (
+                                        <img src={getAvatarSrc(editableProfileData.avatarBase64)} alt="Avatar" className="profile-image" />
                                     ) : (
                                         <LiaUser />
                                     )}
@@ -226,14 +233,14 @@ const Perfil = () => {
                         <div className="profile-summary">
                             <div className="profile-info">
                                 <div className="profile-avatar">
-                                    {profileData.avatarBase64 ? (
-                                        <img src={profileData.avatarBase64} alt="Avatar" className="profile-image" />
+                                    {getAvatarSrc(profileData.avatarBase64) ? (
+                                        <img src={getAvatarSrc(profileData.avatarBase64)} alt="Avatar" className="profile-image" />
                                     ) : (
                                         <LiaUser />
                                     )}
                                 </div>
                                 <div className="profile-text">
-                                    <h2>{profileData.tipo || profileData.nome}</h2>
+                                    <h2>{profileData.tipo || profileData.name}</h2>
                                     <p>{profileData.email}</p>
                                 </div>
                             </div>
@@ -249,7 +256,7 @@ const Perfil = () => {
                                 <div className="card-header">
                                     <h3>Dados Pessoais</h3>
                                 </div>
-                                <div className="data-item"><strong>Nome:</strong><span>{profileData.nome || 'N/A'}</span></div>
+                                <div className="data-item"><strong>Nome:</strong><span>{profileData.name || 'N/A'}</span></div>
                                 <div className="data-item"><strong>Email:</strong><span>{profileData.email || 'N/A'}</span></div>
                                 <div className="data-item"><strong>Telefone:</strong><span>{profileData.phone || 'N/A'}</span></div>
                                 <div className="data-item"><strong>CPF:</strong><span>{profileData.cpf || 'N/A'}</span></div>

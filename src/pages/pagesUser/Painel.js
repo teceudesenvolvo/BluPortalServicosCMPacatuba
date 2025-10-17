@@ -42,8 +42,8 @@ const DashboardPage = () => {
         { title: 'Atendimento Jurídico', icon: <LiaBalanceScaleLeftSolid />, path: '/juridico' },
         { title: 'Balcão do Cidadão', icon: <LiaUserFriendsSolid />, path: '/balcao' },
         { title: 'Ouvidoria', icon: <LiaUserAstronautSolid />, path: '/ouvidoria' },
-        { title: 'Vereadores', icon: <LiaUsersSolid />, path: '/vereadorestodos' },
         { title: 'Procuradoria da Mulher', icon: <LiaFemaleSolid />, path: '/procuradoria' },
+        { title: 'Vereadores', icon: <LiaUsersSolid />, path: '/vereadores' },
         // Pode adicionar mais se necessário
     ];
     

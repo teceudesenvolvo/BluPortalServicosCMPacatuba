@@ -72,12 +72,8 @@ const AddProducts = () => {
             const snapshot = await get(userRef);
             if (snapshot.exists()) {
                 const userData = snapshot.val();
-                setLoggedInUserData({
-                    uid: userId,
-                    nome: userData.name || user.email || 'Usuário',
-                    email: user.email,
-                    tipo: userData.tipo || 'Cidadão', // Busca o tipo do banco de dados
-                });
+                // Carrega todos os dados do perfil do usuário
+                setLoggedInUserData({ ...userData, uid: userId, email: user.email });
             } else {
                 // Caso o perfil não exista, usa dados básicos
                 setLoggedInUserData({ uid: userId, nome: user.displayName || 'Usuário', email: user.email, tipo: 'Cidadão' });
@@ -243,18 +239,31 @@ const AddProducts = () => {
             return;
         }
 
-        // Objeto com todos os dados a serem salvos no Firestore
+        // Objeto com os dados do usuário, garantindo que todos os campos solicitados estejam presentes
+        const dadosUsuarioParaSalvar = {
+            id: userId,
+            name: loggedInUserData?.name || 'Não informado',
+            email: userEmail,
+            phone: loggedInUserData?.phone || 'Não informado',
+            address: loggedInUserData?.address || 'Não informado',
+            neighborhood: loggedInUserData?.neighborhood || 'Não informado',
+            city: loggedInUserData?.city || 'Não informado',
+            state: loggedInUserData?.state || 'Não informado',
+            cep: loggedInUserData?.cep || 'Não informado',
+            sexo: loggedInUserData?.sexo || 'Não informado',
+            tipo: loggedInUserData?.tipo || 'Cidadão',
+        };
+
+        // Objeto com todos os dados a serem salvos no Realtime Database
         const reclamacaoDataFinal = {
             ...reclamacaoFormData,
             protocolo: protocolo,
             companyName: empresaInfo?.razao_social || '',
             cnpjEmpresaReclamada: empresaInfo?.cnpj || reclamacaoFormData.cnpj,
-            arquivos: fileData, // Armazena o array de objetos com nome, tipo e data (base64)
+            arquivos: fileData,
             status: 'aberta',
-            userId: userId,
-            userEmail: userEmail,
             createdAt: timestamp,
-            userDataAtTimeOfComplaint: loggedInUserData,
+            userDataAtTimeOfComplaint: dadosUsuarioParaSalvar, // Salva o objeto completo do usuário
         };
 
         try {
