@@ -106,7 +106,7 @@ const DashboardPage = () => {
                 <header className="page-header-container">
                     <div className="header-title-section">
                         <h1>Câmara Municipal de Pacatuba</h1>
-                        <p>Procon - Realizar Reclamação</p>
+                        <p>Seja bem-vindo ao Portal de Serviços</p>
                     </div>
 
                     <div className="user-profile">

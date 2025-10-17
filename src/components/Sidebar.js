@@ -35,7 +35,7 @@ const Sidebar = ({ onItemClick }) => {
         { title: 'Balcão do Cidadão', icon: <LiaUserFriendsSolid />, path: '/balcao' },
         { title: 'Ouvidoria', icon: <LiaUserAstronautSolid />, path: '/ouvidoria' },
         { title: 'Procuradoria da Mulher', icon: <LiaFemaleSolid />, path: '/procuradoria' },
-        { title: 'Vereadores', icon: <LiaUsersSolid />, path: '/vereadorestodos' },
+        { title: 'Vereadores', icon: <LiaUsersSolid />, path: '/vereadores' },
         { title: 'Perfil', icon: <LiaUser />, path: '/perfil' },
     ];
 

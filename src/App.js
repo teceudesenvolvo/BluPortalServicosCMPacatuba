@@ -24,6 +24,8 @@ import NovaOuvidoria from './pages/pagesUser/NovaOuvidoria';
 import Procuradoria from './pages/pagesUser/Procuradoria';
 import NovaProcuradoria from './pages/pagesUser/NovaProcuradoria';
 import ConfigurarPanico from './pages/pagesUser/ConfigurarPanico';
+import SolicitacoesVereadores from './pages/pagesUser/SolicitacoesVereadores';
+import NovaSolicitacaoVereador from './pages/pagesUser/NovaSolicitacaoVereador';
 
 function App() {
   return (
@@ -49,6 +51,8 @@ function App() {
           <Route path="/procuradoria" element={<Procuradoria />} />
           <Route path="/procuradoria/nova" element={<NovaProcuradoria />} />
           <Route path="/procuradoria/panico-config" element={<ConfigurarPanico />} />
+          <Route path="/vereadores" element={<SolicitacoesVereadores />} />
+          <Route path="/vereadores/nova" element={<NovaSolicitacaoVereador />} />
         </Routes>
       </Router>
     </AuthProvider>
