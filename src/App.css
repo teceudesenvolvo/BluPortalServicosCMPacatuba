@@ -776,10 +776,20 @@ body{
     align-items: flex-start;
     gap: 10px;
   }
+  .page-header-container{
+    display: table !important;
+  }
 
   .user-profile {
     width: 100%;
-    justify-content: flex-end;
+    justify-content: left;
+  }
+  .user-text {
+    text-align: left;
+    margin-right: 0;
+  }
+  .user-avatar{
+    display: none;
   }
 
   .services-grid-main {

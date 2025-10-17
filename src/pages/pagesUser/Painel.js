@@ -111,11 +111,11 @@ const DashboardPage = () => {
             <div className="dashboard-content">
                {/* Cabeçalho da Imagem */}
                 <header className="page-header-container">
+                    
                     <div className="header-title-section">
                         <h1>Câmara Municipal de Pacatuba</h1>
                         <p>Seja bem-vindo ao Portal de Serviços</p>
                     </div>
-
                     <div className="user-profile">
                         <div className="user-text">
                             <p className="user-name-display">{loggedInUserData?.nome || user?.email}</p>
@@ -129,6 +129,7 @@ const DashboardPage = () => {
                             )}
                         </div>
                     </div>
+                    
                 </header>
 
                 <main className="services-grid-main">
