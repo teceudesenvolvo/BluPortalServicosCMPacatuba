@@ -240,8 +240,8 @@ const Perfil = () => {
                                     )}
                                 </div>
                                 <div className="profile-text">
-                                    <h2>{profileData.tipo || profileData.name}</h2>
-                                    <p>{profileData.email}</p>
+                                    <h2>{profileData.name}</h2>
+                                    <p>{profileData.tipo}</p>
                                 </div>
                             </div>
                             <button className="btn-edit" onClick={handleEdit}>
