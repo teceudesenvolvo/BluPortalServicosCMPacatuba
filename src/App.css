@@ -1729,6 +1729,26 @@ body{
     .page-actions-bar {
         justify-content: center;
     }
+
+    /* --- Responsividade dos Formulários Gerais --- */
+    .form-container {
+        padding: 0 15px 20px 15px;
+    }
+
+    .form-container form {
+        padding: 40px !important;
+        margin-left: -25px;
+    }
+
+    .form-row {
+        flex-direction: column;
+        gap: 0;
+    }
+
+    .form-actions {
+        flex-direction: column-reverse; /* "Enviar" fica em cima */
+        gap: 10px;
+    }
 }
 
 .page-actions-bar {
@@ -1857,6 +1877,7 @@ body{
     background-color: white;
     padding: 30px;
     border-radius: 12px;
+    width: 90%;
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
 
