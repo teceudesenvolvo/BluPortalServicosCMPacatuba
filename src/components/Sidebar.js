@@ -10,11 +10,11 @@ import {
     LiaFemaleSolid,
     LiaUsersSolid,
     LiaUser,
-    LiaApple,
-    LiaGooglePlay,
     LiaBarsSolid,
     LiaTimesSolid,
 } from "react-icons/lia";
+ import { FaGooglePlay, FaApple } from "react-icons/fa";
+
 
 // --- Componente: Ítem do Menu Lateral (interno ao Sidebar) ---
 const SidebarItem = ({ icon, title, path, isActive, onClick }) => (
@@ -87,8 +87,8 @@ const Sidebar = ({ onItemClick }) => {
                 <p className="sidebar-app-title">Baixe o aplicativo</p>
                 <div className="sidebar-app-icons">
                     {/* Adicione os links para as lojas de aplicativos aqui */}
-                    <a href="#!" className="app-icon-link"><LiaApple size={32} /></a>
-                    <a href="#!" className="app-icon-link"><LiaGooglePlay size={32} /></a>
+                    <a href="#!" className="app-icon-link"><FaApple size={32} /></a>
+                    <a href="#!" className="app-icon-link"><FaGooglePlay size={32} /></a>
                 </div>
             </div>
 
