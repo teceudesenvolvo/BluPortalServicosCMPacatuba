@@ -4,6 +4,11 @@ import Logo from '../assets/logo-pacatuba.png';
 import {
     LiaTachometerAltSolid,
     LiaGavelSolid,
+    LiaUserFriendsSolid,
+    LiaUsersCogSolid,
+    LiaUserAstronautSolid,
+    LiaFemaleSolid,
+    LiaUsersSolid,
     LiaSignOutAltSolid,
     LiaBarsSolid,
     LiaTimesSolid,
@@ -42,8 +47,12 @@ const AdminSidebar = () => {
 
     const menuItems = [
         { title: 'Dashboard Procon', icon: <LiaTachometerAltSolid />, path: '/admin-procon' },
-        // Adicionado o link para o painel jurídico
         { title: 'Atendimentos Jurídicos', icon: <LiaGavelSolid />, path: '/admin-juridico' },
+        { title: 'Balcão do Cidadão', icon: <LiaUserFriendsSolid />, path: '/admin-balcao' },
+        { title: 'Ouvidoria', icon: <LiaUserAstronautSolid />, path: '/admin-ouvidoria' },
+        { title: 'Procuradoria da Mulher', icon: <LiaFemaleSolid />, path: '/admin-procuradoria' },
+        { title: 'Solicitações Vereadores', icon: <LiaUsersSolid />, path: '/admin-vereadores' },
+        { title: 'Gerenciar Usuários', icon: <LiaUsersCogSolid />, path: '/admin-users' },
     ];
 
     const handleMobileMenuToggle = () => setMobileMenuOpen(!isMobileMenuOpen);

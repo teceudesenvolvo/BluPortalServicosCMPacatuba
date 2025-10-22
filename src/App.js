@@ -29,6 +29,11 @@ import NovaSolicitacaoVereador from './pages/pagesUser/NovaSolicitacaoVereador';
 
 import AdminProcon from './pages/pagesAdmin/AdminProcon';
 import AdminJuridico from './pages/pagesAdmin/AdminJuridico';
+import AdminBalcao from './pages/pagesAdmin/AdminBalcao';
+import AdminOuvidoria from './pages/pagesAdmin/AdminOuvidoria';
+import AdminProcuradoria from './pages/pagesAdmin/AdminProcuradoria';
+import AdminVereadores from './pages/pagesAdmin/AdminVereadores';
+import AdminUsers from './pages/pagesAdmin/AdminUsers';
 
 
 function App() {
@@ -62,6 +67,11 @@ function App() {
           {/* Com Login - Admin */}
           <Route path="/admin-procon" element={<AdminProcon />} />
           <Route path="/admin-juridico" element={<AdminJuridico />} />
+          <Route path="/admin-balcao" element={<AdminBalcao />} />
+          <Route path="/admin-ouvidoria" element={<AdminOuvidoria />} />
+          <Route path="/admin-procuradoria" element={<AdminProcuradoria />} />
+          <Route path="/admin-vereadores" element={<AdminVereadores />} />
+          <Route path="/admin-users" element={<AdminUsers />} />
 
         </Routes>
       </Router>
