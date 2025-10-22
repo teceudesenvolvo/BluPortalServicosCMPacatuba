@@ -122,13 +122,6 @@ const CadastroPage = () => {
                                 required
                             />
                         </div>
-                        <input
-                            type="email"
-                            placeholder="Email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            required
-                        />
                         <div className="form-group">
                             <select 
                                 id="sexo" 
@@ -142,6 +135,14 @@ const CadastroPage = () => {
                                 <option value="nao-binario">Não Binário</option>
                             </select>
                         </div>
+                        <input
+                            type="email"
+                            placeholder="Email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
+                        />
+                        
                         <input
                             type="password"
                             placeholder="Senha"
