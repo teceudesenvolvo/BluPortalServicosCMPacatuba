@@ -6,7 +6,8 @@ import { ref, get, update } from 'firebase/database';
 import { signOut, sendPasswordResetEmail } from 'firebase/auth';
 import { useAuth } from '../contexts/FirebaseAuthContext';
 import { auth, db } from '../firebase';
-import Sidebar from '../components/Sidebar';
+import Sidebar from '../components/Sidebar'; // Sidebar do Cidadão
+import AdminSidebar from '../components/AdminSidebar'; // Sidebar do Admin
 
 // Ícones
 import {
@@ -163,7 +164,11 @@ const Perfil = () => {
     // Renderização do Perfil
     return (
         <div className="dashboard-layout">
-            <Sidebar onItemClick={handleNavigation} />
+            {['Admin', 'Vereador', 'Juridico', 'Procuradoria', 'Procon', 'Ouvidoria', 'Balcão'].includes(profileData?.tipo) ? (
+                <AdminSidebar />
+            ) : (
+                <Sidebar onItemClick={handleNavigation} />
+            )}
             <div className="dashboard-content">
                 
                 <header className="content-header">

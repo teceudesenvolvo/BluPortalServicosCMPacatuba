@@ -4,7 +4,8 @@ import { signInWithEmailAndPassword, sendPasswordResetEmail } from 'firebase/aut
 
 // Importa o hook de autenticação e a instância do auth
 import { useAuth } from '../contexts/FirebaseAuthContext';
-import { auth } from '../firebase';
+import { auth, db } from '../firebase';
+import { ref, get } from 'firebase/database';
 
 import Brasao from '../assets/logo-pacatuba.png';
 import Logo from '../assets/logo-pacatuba-azul.png';
@@ -21,7 +22,48 @@ const LoginPage = () => {
     // Efeito para redirecionar se o usuário já estiver logado.
     useEffect(() => {
         if (currentUser) {
-            navigate('/dashboard', { replace: true });
+            const checkUserTypeAndRedirect = async (user) => {
+                // Busca o tipo de usuário no Realtime Database
+                const userRef = ref(db, `users/${user.uid}`);
+                const snapshot = await get(userRef);
+
+                if (snapshot.exists()) {
+                    const userData = snapshot.val();
+                    const userType = userData.tipo;
+
+                    // Redireciona com base no tipo de usuário
+                    switch (userType) {
+                        case 'Admin':
+                            navigate('/admin-users', { replace: true });
+                            break;
+                        case 'Vereador':
+                            navigate('/admin-vereadores', { replace: true });
+                            break;
+                        case 'Juridico':
+                            navigate('/admin-juridico', { replace: true });
+                            break;
+                        case 'Procuradoria':
+                            navigate('/admin-procuradoria', { replace: true });
+                            break;
+                        case 'Procon':
+                            navigate('/admin-procon', { replace: true });
+                            break;
+                        case 'Ouvidoria':
+                            navigate('/admin-ouvidoria', { replace: true });
+                            break;
+                        case 'Balcão':
+                            navigate('/admin-balcao', { replace: true });
+                            break;
+                        default: // Cidadão ou tipo não definido
+                            navigate('/dashboard', { replace: true });
+                    }
+                } else {
+                    // Se não encontrar perfil, vai para o dashboard padrão
+                    navigate('/dashboard', { replace: true });
+                }
+            };
+
+            checkUserTypeAndRedirect(currentUser);
         }
     }, [currentUser, navigate]);
 
@@ -37,12 +79,47 @@ const LoginPage = () => {
 
         try {
             // Chama a função de login do Firebase
-            await signInWithEmailAndPassword(auth, email, password);
+            const userCredential = await signInWithEmailAndPassword(auth, email, password);
+            const user = userCredential.user;
 
-            // O AuthContext irá detectar a mudança e redirecionar
-            // Ou podemos redirecionar explicitamente aqui:
-            navigate('/dashboard', { replace: true });
+            // Busca o tipo de usuário no Realtime Database
+            const userRef = ref(db, `users/${user.uid}`);
+            const snapshot = await get(userRef);
 
+            if (snapshot.exists()) {
+                const userData = snapshot.val();
+                const userType = userData.tipo;
+
+                // Redireciona com base no tipo de usuário
+                switch (userType) {
+                    case 'Admin':
+                        navigate('/admin-users', { replace: true });
+                        break;
+                    case 'Vereador':
+                        navigate('/admin-vereadores', { replace: true });
+                        break;
+                    case 'Juridico':
+                        navigate('/admin-juridico', { replace: true });
+                        break;
+                    case 'Procuradoria':
+                        navigate('/admin-procuradoria', { replace: true });
+                        break;
+                    case 'Procon':
+                        navigate('/admin-procon', { replace: true });
+                        break;
+                    case 'Ouvidoria':
+                        navigate('/admin-ouvidoria', { replace: true });
+                        break;
+                    case 'Balcão':
+                        navigate('/admin-balcao', { replace: true });
+                        break;
+                    default: // Cidadão ou tipo não definido
+                        navigate('/dashboard', { replace: true });
+                }
+            } else {
+                // Se não encontrar perfil, vai para o dashboard padrão
+                navigate('/dashboard', { replace: true });
+            }
         } catch (err) {
             console.error("Erro de login:", err);
             setLoading(false);

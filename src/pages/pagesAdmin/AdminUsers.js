@@ -61,9 +61,14 @@ const UserEditModal = ({ user, onClose, onSave }) => {
                         <div className="data-item-edit">
                             <label>Tipo de Usuário:</label>
                             <select name="tipo" value={editedUser.tipo || 'Cidadão'} onChange={handleChange}>
-                                <option value="Cidadão">Cidadão</option>
                                 <option value="Admin">Admin</option>
                                 <option value="Vereador">Vereador</option>
+                                <option value="Juridico">Juridico</option>
+                                <option value="Procuradoria">Procuradoria</option>
+                                <option value="Procon">Procon</option>
+                                <option value="Ouvidoria">Ouvidoria</option>
+                                <option value="Balcão">Balcão</option>
+                                <option value="Cidadão">Cidadão</option>
                             </select>
                         </div>
                     </div>

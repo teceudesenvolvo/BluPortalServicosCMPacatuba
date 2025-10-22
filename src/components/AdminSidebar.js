@@ -9,11 +9,11 @@ import {
     LiaUserAstronautSolid,
     LiaFemaleSolid,
     LiaUsersSolid,
-    LiaSignOutAltSolid,
+    LiaUser,
     LiaBarsSolid,
     LiaTimesSolid,
 } from "react-icons/lia";
-import { signOut, onAuthStateChanged } from 'firebase/auth';
+import { onAuthStateChanged } from 'firebase/auth';
 import { auth, db } from '../firebase';
 import { ref, get } from 'firebase/database';
 
@@ -33,6 +33,7 @@ const AdminSidebar = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const [userType, setUserType] = useState(null);
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -43,41 +44,42 @@ const AdminSidebar = () => {
                     const snapshot = await get(userRef);
                     if (snapshot.exists()) {
                         const userData = snapshot.val();
-                        const userType = userData.tipo || 'Tipo não definido';
-                        alert(`Tipo de usuário: ${userType}`);
+                        setUserType(userData.tipo || 'Cidadão');
                     } else {
-                        alert('Perfil de usuário não encontrado no banco de dados.');
+                        setUserType('Cidadão'); // Define um padrão caso não encontre o perfil
                     }
                 } catch (error) {
                     console.error("Erro ao buscar tipo de usuário:", error);
-                    alert('Erro ao buscar tipo de usuário.');
+                    setUserType('Cidadão'); // Define um padrão em caso de erro
                 }
+            } else {
+                setUserType(null); // Limpa o tipo se o usuário deslogar
             }
         });
         return () => unsubscribe(); // Limpa o listener ao desmontar o componente
     }, []); // O array vazio faz com que o efeito rode apenas uma vez
 
-    const handleSignOut = async () => {
-        if (window.confirm("Tem certeza que deseja sair da conta?")) {
-            try {
-                await signOut(auth);
-                navigate('/login');
-            } catch (e) {
-                console.error("Erro ao sair:", e);
-                alert("Erro ao tentar sair da conta.");
-            }
-        }
-    };
-
-    const menuItems = [
-        { title: 'Procon', icon: <LiaTachometerAltSolid />, path: '/admin-procon' },
-        { title: 'Atendimentos Jurídicos', icon: <LiaGavelSolid />, path: '/admin-juridico' },
-        { title: 'Balcão do Cidadão', icon: <LiaUserFriendsSolid />, path: '/admin-balcao' },
-        { title: 'Ouvidoria', icon: <LiaUserAstronautSolid />, path: '/admin-ouvidoria' },
-        { title: 'Procuradoria da Mulher', icon: <LiaFemaleSolid />, path: '/admin-procuradoria' },
-        { title: 'Solicitações Vereadores', icon: <LiaUsersSolid />, path: '/admin-vereadores' },
-        { title: 'Gerenciar Usuários', icon: <LiaUsersCogSolid />, path: '/admin-users' },
+    const allMenuItems = [
+        { title: 'Procon', icon: <LiaTachometerAltSolid />, path: '/admin-procon', roles: ['Admin', 'Procon'] },
+        { title: 'Atendimentos Jurídicos', icon: <LiaGavelSolid />, path: '/admin-juridico', roles: ['Admin', 'Juridico'] },
+        { title: 'Balcão do Cidadão', icon: <LiaUserFriendsSolid />, path: '/admin-balcao', roles: ['Admin', 'Balcão'] },
+        { title: 'Ouvidoria', icon: <LiaUserAstronautSolid />, path: '/admin-ouvidoria', roles: ['Admin', 'Ouvidoria'] },
+        { title: 'Procuradoria da Mulher', icon: <LiaFemaleSolid />, path: '/admin-procuradoria', roles: ['Admin', 'Procuradoria'] },
+        { title: 'Solicitações Vereadores', icon: <LiaUsersSolid />, path: '/admin-vereadores', roles: ['Admin', 'Vereador'] },
+        { title: 'Gerenciar Usuários', icon: <LiaUsersCogSolid />, path: '/admin-users', roles: ['Admin'] },
+        { title: 'Perfil', icon: <LiaUser />, path: '/perfil', roles: ['Admin', 'Vereador', 'Juridico', 'Procuradoria', 'Procon', 'Ouvidoria', 'Balcão'] },
     ];
+
+    // Filtra os itens do menu com base no tipo de usuário
+    const visibleMenuItems = allMenuItems.filter(item => {
+        if (userType === 'Admin') {
+            return true; // Admin vê tudo
+        }
+        if (item.roles) {
+            return item.roles.includes(userType);
+        }
+        return false;
+    });
 
     const handleMobileMenuToggle = () => setMobileMenuOpen(!isMobileMenuOpen);
 
@@ -96,7 +98,7 @@ const AdminSidebar = () => {
             </div>
 
             <div className={`sidebar-menu ${isMobileMenuOpen ? 'is-open' : ''}`}>
-                {menuItems.map((item) => (
+                {visibleMenuItems.map((item) => (
                     <AdminSidebarItem
                         key={item.title}
                         icon={item.icon}
@@ -106,11 +108,6 @@ const AdminSidebar = () => {
                         onClick={handleItemClick}
                     />
                 ))}
-                {/* Botão de Sair */}
-                <div className="sidebar-item" onClick={handleSignOut}>
-                    <span className="sidebar-icon"><LiaSignOutAltSolid /></span>
-                    <span className="sidebar-title">Sair</span>
-                </div>
             </div>
         </div>
     );

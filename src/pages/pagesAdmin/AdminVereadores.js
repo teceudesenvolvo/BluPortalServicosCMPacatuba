@@ -142,6 +142,7 @@ const AdminVereadoresDashboard = () => {
     const [solicitacoes, setSolicitacoes] = useState([]);
     const [currentTab, setCurrentTab] = useState('Todas');
     const [statusCounts, setStatusCounts] = useState({});
+    const [loggedInUserData, setLoggedInUserData] = useState(null);
     const [selectedSolicitacao, setSelectedSolicitacao] = useState(null);
 
     useEffect(() => {
@@ -156,15 +157,37 @@ const AdminVereadoresDashboard = () => {
     useEffect(() => {
         if (!isAuthReady) return;
 
+        const fetchUserProfile = async () => {
+            const user = auth.currentUser;
+            if (user) {
+                const userRef = ref(db, `users/${user.uid}`);
+                const snapshot = await get(userRef);
+                if (snapshot.exists()) {
+                    setLoggedInUserData(snapshot.val());
+                }
+            }
+        };
+
+        fetchUserProfile();
+    }, [isAuthReady]);
+
+    useEffect(() => {
+        if (!isAuthReady || !loggedInUserData) return;
+
         const solicitacoesRef = ref(db, 'solicitacoes-vereadores');
         const q = query(solicitacoesRef);
 
         const unsubscribe = onValue(q, (snapshot) => {
             const data = snapshot.val();
-            const fetchedData = data ? Object.keys(data).map(key => ({ id: key, ...data[key] })) : [];
-            setSolicitacoes(fetchedData);
+            let fetchedSolicitacoes = data ? Object.keys(data).map(key => ({ id: key, ...data[key] })) : [];
 
-            const counts = fetchedData.reduce((acc, item) => {
+            if (loggedInUserData.tipo === 'Vereador') {
+                fetchedSolicitacoes = fetchedSolicitacoes.filter(item => item.dadosSolicitacao?.vereadorNome === loggedInUserData.name);
+            }
+
+            setSolicitacoes(fetchedSolicitacoes);
+
+            const counts = fetchedSolicitacoes.reduce((acc, item) => {
                 const status = item.status || 'Não Classificado';
                 acc[status] = (acc[status] || 0) + 1;
                 return acc;
@@ -179,7 +202,7 @@ const AdminVereadoresDashboard = () => {
         });
 
         return () => unsubscribe();
-    }, [isAuthReady]);
+    }, [isAuthReady, loggedInUserData]);
 
     useEffect(() => {
         if (!chartRef.current || Object.keys(statusCounts).length === 0) return;
