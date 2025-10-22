@@ -28,6 +28,7 @@ import SolicitacoesVereadores from './pages/pagesUser/SolicitacoesVereadores';
 import NovaSolicitacaoVereador from './pages/pagesUser/NovaSolicitacaoVereador';
 
 import AdminProcon from './pages/pagesAdmin/AdminProcon';
+import AdminJuridico from './pages/pagesAdmin/AdminJuridico';
 
 
 function App() {
@@ -60,6 +61,7 @@ function App() {
 
           {/* Com Login - Admin */}
           <Route path="/admin-procon" element={<AdminProcon />} />
+          <Route path="/admin-juridico" element={<AdminJuridico />} />
 
         </Routes>
       </Router>

@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import Logo from '../assets/logo-pacatuba.png';
 import {
     LiaTachometerAltSolid,
+    LiaGavelSolid,
     LiaSignOutAltSolid,
     LiaBarsSolid,
     LiaTimesSolid,
@@ -41,8 +42,8 @@ const AdminSidebar = () => {
 
     const menuItems = [
         { title: 'Dashboard Procon', icon: <LiaTachometerAltSolid />, path: '/admin-procon' },
-        // Adicione outras rotas de admin aqui no futuro
-        // { title: 'Atendimentos Jurídicos', icon: <LiaGavelSolid />, path: '/admin-juridico' },
+        // Adicionado o link para o painel jurídico
+        { title: 'Atendimentos Jurídicos', icon: <LiaGavelSolid />, path: '/admin-juridico' },
     ];
 
     const handleMobileMenuToggle = () => setMobileMenuOpen(!isMobileMenuOpen);
