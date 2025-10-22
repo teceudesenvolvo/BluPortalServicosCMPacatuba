@@ -20,10 +20,11 @@ const ComplaintDetailsModal = ({ denuncia, onClose, onStatusChange, onSendMessag
         if (denuncia) {
             setNewStatus(denuncia.status || '');
             const fetchConsumerProfile = async () => {
-                // Extrai o userId diretamente do objeto da denúncia
-                const userId = denuncia.userDataAtTimeOfComplaint?.id;
+                // 1. Extrai o userId dos dados salvos na reclamação.
+                const userId = denuncia.userId;
+                console.log("UserID da denúncia:", userId);
 
-                // Se não houver um userId, usa os dados que foram salvos no momento da reclamação
+                // 2. Se não houver um userId, usa os dados do momento da reclamação como fallback.
                 if (!userId) {
                     setConsumerProfile(denuncia.userDataAtTimeOfComplaint || {});
                     setLoadingProfile(false);
@@ -31,14 +32,16 @@ const ComplaintDetailsModal = ({ denuncia, onClose, onStatusChange, onSendMessag
                 }
 
                 setLoadingProfile(true);
+                // 3. Busca o perfil mais recente do usuário na coleção 'users' usando o userId.
                 const userRef = ref(db, `users/${userId}`);
+                console.log(userRef);
                 try {
                     const snapshot = await get(userRef);
                     // Se o perfil atual existir, use-o. Senão, use os dados do momento da reclamação.
                     setConsumerProfile(snapshot.exists() ? snapshot.val() : denuncia.userDataAtTimeOfComplaint);
                 } catch (error) {
                     console.error("Erro ao buscar perfil atual do consumidor:", error);
-                    setConsumerProfile(denuncia.userDataAtTimeOfComplaint); // Em caso de erro, usa os dados da reclamação como fallback
+                    setConsumerProfile(denuncia.userDataAtTimeOfComplaint); // Em caso de erro, também usa o fallback.
                 } finally {
                     setLoadingProfile(false);
                 }
