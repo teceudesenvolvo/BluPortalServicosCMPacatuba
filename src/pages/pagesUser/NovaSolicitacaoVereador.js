@@ -3,8 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/FirebaseAuthContext';
 import Sidebar from '../../components/Sidebar';
 import { db } from '../../firebase';
-import { ref, get, push, set, serverTimestamp } from 'firebase/database';
-import axios from 'axios';
+import { ref, get, push, set, serverTimestamp, query, orderByChild, equalTo } from 'firebase/database';
 
 // Ícones
 import { LiaPaperPlane, LiaArrowLeftSolid } from "react-icons/lia";
@@ -28,14 +27,23 @@ const NovaSolicitacaoVereador = () => {
     const [success, setSuccess] = useState('');
     const [loggedInUserData, setLoggedInUserData] = useState(null);
 
-    // Busca a lista de vereadores da API
+    // Busca a lista de vereadores da coleção 'users' no Firebase
     useEffect(() => {
         const fetchVereadores = async () => {
             try {
-                const response = await axios.get('/api/dadosabertosexportar?d=vereadores&a=&f=json&itens_por_pagina=20');
-                // A API do proxy retorna o array diretamente em response.data
-                if (Array.isArray(response.data)) {
-                    setVereadores(response.data);
+                const usersRef = ref(db, 'users');
+                const q = query(usersRef, orderByChild('tipo'), equalTo('Vereador'));
+                const snapshot = await get(q);
+
+                if (snapshot.exists()) {
+                    const data = snapshot.val();
+                    const vereadoresList = Object.keys(data).map(key => ({
+                        uid: key, // O ID do usuário agora é o UID
+                        ...data[key]
+                    }));
+                    setVereadores(vereadoresList);
+                } else {
+                    setError('Nenhum vereador encontrado no sistema.');
                 }
             } catch (err) {
                 setError('Falha ao carregar a lista de vereadores.');
@@ -69,11 +77,11 @@ const NovaSolicitacaoVereador = () => {
     const handleChange = (e) => {
         const { name, value } = e.target;
         if (name === 'vereadorId') {
-            const vereadorSelecionado = vereadores.find(v => v.Id === value);
+            const vereadorSelecionado = vereadores.find(v => v.uid === value);
             setFormData(prevData => ({
                 ...prevData,
                 vereadorId: value,
-                vereadorNome: vereadorSelecionado ? vereadorSelecionado.Nome : ''
+                vereadorNome: vereadorSelecionado ? vereadorSelecionado.name : ''
             }));
         } else {
             setFormData(prevData => ({ ...prevData, [name]: value }));
@@ -150,7 +158,7 @@ const NovaSolicitacaoVereador = () => {
                             <select id="vereadorId" name="vereadorId" value={formData.vereadorId} onChange={handleChange} required>
                                 <option value="">Selecione um(a) vereador(a)</option>
                                 {vereadores.map(v => (
-                                    <option key={v.Id} value={v.Id}>{v.Nome}</option>
+                                    <option key={v.uid} value={v.uid}>{v.name}</option>
                                 ))}
                             </select>
                         </div>

@@ -17,6 +17,7 @@ const CadastroPage = () => {
     const [name, setName] = useState('');
     const [surname, setSurname] = useState('');
     const [email, setEmail] = useState('');
+    const [sexo, setSexo] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [error, setError] = useState(null);
@@ -53,6 +54,7 @@ const CadastroPage = () => {
             await set(ref(db, 'users/' + user.uid), {
                 name: `${name} ${surname}`,
                 email: user.email,
+                sexo: sexo,
                 tipo: 'Cidadão', // Define o tipo padrão do usuário
                 createdAt: new Date().toISOString(),
             });
@@ -127,6 +129,19 @@ const CadastroPage = () => {
                             onChange={(e) => setEmail(e.target.value)}
                             required
                         />
+                        <div className="form-group">
+                            <select 
+                                id="sexo" 
+                                name="sexo" 
+                                value={sexo} 
+                                onChange={(e) => setSexo(e.target.value)} 
+                                required>
+                                <option value="">Selecione o Sexo</option>
+                                <option value="masculino">Masculino</option>
+                                <option value="feminino">Feminino</option>
+                                <option value="nao-binario">Não Binário</option>
+                            </select>
+                        </div>
                         <input
                             type="password"
                             placeholder="Senha"
