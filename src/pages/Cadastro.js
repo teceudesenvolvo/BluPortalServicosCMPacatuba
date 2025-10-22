@@ -14,6 +14,8 @@ const CadastroPage = () => {
     const navigate = useNavigate();
     const { currentUser } = useAuth();
 
+    const [name, setName] = useState('');
+    const [surname, setSurname] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -49,6 +51,7 @@ const CadastroPage = () => {
 
             // Salva informações adicionais do usuário no Realtime Database
             await set(ref(db, 'users/' + user.uid), {
+                name: `${name} ${surname}`,
                 email: user.email,
                 tipo: 'Cidadão', // Define o tipo padrão do usuário
                 createdAt: new Date().toISOString(),
@@ -101,6 +104,22 @@ const CadastroPage = () => {
                     </div>
 
                     <form onSubmit={handleRegister}>
+                        <div className="form-row">
+                            <input
+                                type="text"
+                                placeholder="Nome"
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
+                                required
+                            />
+                            <input
+                                type="text"
+                                placeholder="Sobrenome"
+                                value={surname}
+                                onChange={(e) => setSurname(e.target.value)}
+                                required
+                            />
+                        </div>
                         <input
                             type="email"
                             placeholder="Email"
