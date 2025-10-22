@@ -27,6 +27,9 @@ import ConfigurarPanico from './pages/pagesUser/ConfigurarPanico';
 import SolicitacoesVereadores from './pages/pagesUser/SolicitacoesVereadores';
 import NovaSolicitacaoVereador from './pages/pagesUser/NovaSolicitacaoVereador';
 
+import AdminProcon from './pages/pagesAdmin/AdminProcon';
+
+
 function App() {
   return (
     // 1. Envolve toda a aplicação com o AuthProvider
@@ -38,7 +41,8 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/cadastro" element={<CadastroPage />} />
           <Route path="/perfil" element={<Perfil />} />
-
+          
+          {/* Com Login - Usuário Comum */}
           <Route path="/dashboard" element={<Painel />} />
           <Route path="/procon" element={<Procon />} />
           <Route path="/procon-atendimentos" element={<ProconAtendimentos />} />
@@ -53,6 +57,10 @@ function App() {
           <Route path="/procuradoria/panico-config" element={<ConfigurarPanico />} />
           <Route path="/vereadores" element={<SolicitacoesVereadores />} />
           <Route path="/vereadores/nova" element={<NovaSolicitacaoVereador />} />
+
+          {/* Com Login - Admin */}
+          <Route path="/admin-procon" element={<AdminProcon />} />
+
         </Routes>
       </Router>
     </AuthProvider>

@@ -2032,6 +2032,92 @@ body{
     white-space: pre-wrap; /* Mantém a formatação do texto */
 }
 
+.file-link {
+    display: block;
+    margin-top: 5px;
+    color: #007bff;
+    text-decoration: none;
+    font-weight: 500;
+    word-break: break-all;
+}
+
+.file-list {
+    list-style: none;
+    padding: 0;
+    margin-top: 10px;
+}
+
+.file-list li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 5px 0;
+}
+
+.sender-tag {
+    font-size: 0.7rem;
+    font-weight: bold;
+    padding: 2px 6px;
+    border-radius: 10px;
+    background-color: #dbeafe; /* Azul para admin */
+    color: #1e3a8a;
+}
+
+.message-history {
+    max-height: 200px;
+    overflow-y: auto;
+    background-color: #f9f9f9;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 15px;
+}
+
+.message-bubble {
+    padding: 8px 12px;
+    border-radius: 15px;
+    margin-bottom: 8px;
+    max-width: 80%;
+}
+
+.message-bubble p {
+    margin: 0 0 4px 0;
+}
+
+.message-bubble small {
+    font-size: 0.7rem;
+    color: #666;
+}
+
+.message-bubble.user {
+    background-color: #e5e7eb;
+    align-self: flex-start;
+}
+
+.message-bubble.admin {
+    background-color: #dbeafe;
+    align-self: flex-end;
+    text-align: right;
+}
+
+.tab-button {
+    background: none;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #4b5563;
+    border-bottom: 2px solid transparent;
+    transition: color 0.2s, border-bottom-color 0.2s;
+}
+
+.tab-button.active {
+    color: #0d1e57; /* Cor principal para o texto ativo */
+    border-bottom-color: #0d1e57; /* Cor da borda inferior para indicar atividade */
+}
+
+
 @keyframes slide-down {
     from {
         transform: translateY(-30px);

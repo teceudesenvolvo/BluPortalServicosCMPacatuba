@@ -241,7 +241,7 @@ const AddProducts = () => {
 
         // Objeto com os dados do usuário, garantindo que todos os campos solicitados estejam presentes
         const dadosUsuarioParaSalvar = {
-            id: userId,
+            userId: userId, // Padronizando o campo para 'userId'
             name: loggedInUserData?.name || 'Não informado',
             email: userEmail,
             phone: loggedInUserData?.phone || 'Não informado',
@@ -261,7 +261,6 @@ const AddProducts = () => {
             companyName: empresaInfo?.razao_social || '',
             cnpjEmpresaReclamada: empresaInfo?.cnpj || reclamacaoFormData.cnpj,
             arquivos: fileData,
-            status: 'aberta',
             createdAt: timestamp,
             userDataAtTimeOfComplaint: dadosUsuarioParaSalvar, // Salva o objeto completo do usuário
         };

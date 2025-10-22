@@ -8,6 +8,7 @@ import Sidebar from '../../components/Sidebar';
 
 import {
     LiaPlusSolid,
+    LiaPaperclipSolid,
     LiaTimesSolid,
 } from "react-icons/lia";
 
@@ -111,14 +112,33 @@ const ComplaintDetailsModal = ({ complaint, onClose }) => {
                     {complaint.pedidoConsumidor || 'N/A'}
                 </p>
                 
-                {complaint.arquivos && complaint.arquivos.length > 0 && (
+                {/* Lista de Arquivos */}
+                {(complaint.arquivos && complaint.arquivos.length > 0) && (
                     <>
-                        <div className="modal-section-title">Arquivos Anexados (Nomes)</div>
-                        <ul className="modal-description" style={{ listStyleType: 'disc', paddingLeft: '20px', wordBreak: 'break-all' }}>
-                            {complaint.arquivos.map((file, index) => <li key={index}>{file.name}</li>)}
+                        <div className="modal-section-title">Arquivos Anexados</div>
+                        <ul className="file-list">
+                            {complaint.arquivos.map((file, index) => (
+                                <li key={index}>
+                                    <a href={file.data} target="_blank" rel="noopener noreferrer" className="file-link">
+                                        <LiaPaperclipSolid /> {file.name}
+                                    </a>
+                                    {file.sender === 'admin' && <span className="sender-tag admin-tag">Admin</span>}
+                                </li>
+                            ))}
                         </ul>
                     </>
                 )}
+
+                {/* Histórico de Mensagens */}
+                <div className="modal-section-title">Mensagens</div>
+                <div className="message-history">
+                    {complaint.messages && Object.values(complaint.messages).length > 0 ? Object.values(complaint.messages).map((msg, index) => (
+                        <div key={index} className={`message-bubble ${msg.sender === 'admin' ? 'admin' : 'user'}`}>
+                            <p>{msg.text}</p>
+                            <small>{new Date(msg.timestamp).toLocaleString('pt-BR')}</small>
+                        </div>
+                    )) : <p>Nenhuma mensagem trocada.</p>}
+                </div>
             </div>
         </div>
     );
@@ -180,19 +200,19 @@ const ProconAtendimento = () => {
     const fetchUserProfile = useCallback(async () => {
         if (!user) return;
         const db = getDatabase();
-        const userRef = ref(db, 'users/' + user.uid);
+        const userRef = ref(db, 'users/' + user.uid); // Busca o usuário específico pelo UID
         try {
             const snapshot = await get(userRef);
             if (snapshot.exists()) {
                 const userData = snapshot.val();
                 setLoggedInUserData({
                     uid: user.uid,
-                    nome: userData.name || user.displayName || 'Usuário',
+                    name: userData.name || user.displayName || 'Usuário',
                     email: user.email,
                     tipo: userData.tipo || 'Cidadão',
                 });
             } else {
-                setLoggedInUserData({ uid: user.uid, nome: user.displayName || 'Usuário', email: user.email, tipo: 'Cidadão' });
+                setLoggedInUserData({ uid: user.uid, name: user.displayName || 'Usuário', email: user.email, tipo: 'Cidadão' });
             }
         } finally {
             setLoadingLoggedInUserData(false);
@@ -243,7 +263,7 @@ const ProconAtendimento = () => {
 
                     <div className="user-profile">
                         <div className="user-text">
-                            <p className="user-name-display">{loggedInUserData?.nome || user?.email || 'Usuário'}</p>
+                            <p className="user-name-display">{loggedInUserData?.name || user?.email || 'Usuário'}</p>
                             <p className="user-type-display">{loggedInUserData?.tipo || 'Cidadão'}</p>
                         </div>
                         <div className="user-avatar"></div> {/* Círculo Azul */}
