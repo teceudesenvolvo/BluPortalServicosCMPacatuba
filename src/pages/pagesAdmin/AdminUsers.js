@@ -39,15 +39,18 @@ const UserEditModal = ({ user, onClose, onSave }) => {
                         <div className="data-card">
                             <div className="card-header"><h3>Dados Pessoais</h3></div>
                             <div className="data-item-edit"><label>Nome:</label><input type="text" name="name" value={editedUser.name || ''} onChange={handleChange} /></div>
-                            <div className="data-item-edit"><label>Email:</label><input type="email" name="email" value={editedUser.email || ''} onChange={handleChange} /></div>
+                            <div className="data-item-edit"><label>Email:</label><input type="email" name="email" value={editedUser.email || ''} onChange={handleChange} disabled /></div>
                             <div className="data-item-edit"><label>Telefone:</label><input type="tel" name="phone" value={editedUser.phone || ''} onChange={handleChange} /></div>
                             <div className="data-item-edit"><label>CPF:</label><input type="text" name="cpf" value={editedUser.cpf || ''} onChange={handleChange} /></div>
                             <div className="data-item-edit"><label>Sexo:</label><input type="text" name="sexo" value={editedUser.sexo || ''} onChange={handleChange} /></div>
+                            <div className="data-item-edit"><label>Estado Civil:</label><input type="text" name="estadoCivil" value={editedUser.estadoCivil || ''} onChange={handleChange} /></div>
                         </div>
                         <div className="data-card">
                             <div className="card-header"><h3>Endereço</h3></div>
                             <div className="data-item-edit"><label>CEP:</label><input type="text" name="cep" value={editedUser.cep || ''} onChange={handleChange} /></div>
                             <div className="data-item-edit"><label>Endereço:</label><input type="text" name="address" value={editedUser.address || ''} onChange={handleChange} /></div>
+                            <div className="data-item-edit"><label>Número:</label><input type="text" name="numero" value={editedUser.numero || ''} onChange={handleChange} /></div>
+                            <div className="data-item-edit"><label>Complemento:</label><input type="text" name="complemento" value={editedUser.complemento || ''} onChange={handleChange} /></div>
                             <div className="data-item-edit"><label>Bairro:</label><input type="text" name="neighborhood" value={editedUser.neighborhood || ''} onChange={handleChange} /></div>
                             <div className="data-item-edit"><label>Cidade:</label><input type="text" name="city" value={editedUser.city || ''} onChange={handleChange} /></div>
                             <div className="data-item-edit"><label>Estado:</label><input type="text" name="state" value={editedUser.state || ''} onChange={handleChange} /></div>

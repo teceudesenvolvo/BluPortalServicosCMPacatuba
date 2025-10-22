@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useLocation, useNavigate,  } from 'react-router-dom';
 import Logo from '../assets/logo-pacatuba.png';
 import {
     LiaTachometerAltSolid,
@@ -13,8 +13,9 @@ import {
     LiaBarsSolid,
     LiaTimesSolid,
 } from "react-icons/lia";
-import { signOut } from 'firebase/auth';
-import { auth } from '../firebase';
+import { signOut, onAuthStateChanged } from 'firebase/auth';
+import { auth, db } from '../firebase';
+import { ref, get } from 'firebase/database';
 
 // --- Componente: Ítem do Menu Lateral (interno ao Sidebar) ---
 const AdminSidebarItem = ({ icon, title, path, isActive, onClick }) => (
@@ -33,6 +34,29 @@ const AdminSidebar = () => {
     const navigate = useNavigate();
     const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
 
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                // Se o usuário estiver logado, busca o perfil no Realtime Database
+                const userRef = ref(db, `users/${user.uid}`);
+                try {
+                    const snapshot = await get(userRef);
+                    if (snapshot.exists()) {
+                        const userData = snapshot.val();
+                        const userType = userData.tipo || 'Tipo não definido';
+                        alert(`Tipo de usuário: ${userType}`);
+                    } else {
+                        alert('Perfil de usuário não encontrado no banco de dados.');
+                    }
+                } catch (error) {
+                    console.error("Erro ao buscar tipo de usuário:", error);
+                    alert('Erro ao buscar tipo de usuário.');
+                }
+            }
+        });
+        return () => unsubscribe(); // Limpa o listener ao desmontar o componente
+    }, []); // O array vazio faz com que o efeito rode apenas uma vez
+
     const handleSignOut = async () => {
         if (window.confirm("Tem certeza que deseja sair da conta?")) {
             try {
@@ -46,7 +70,7 @@ const AdminSidebar = () => {
     };
 
     const menuItems = [
-        { title: 'Dashboard Procon', icon: <LiaTachometerAltSolid />, path: '/admin-procon' },
+        { title: 'Procon', icon: <LiaTachometerAltSolid />, path: '/admin-procon' },
         { title: 'Atendimentos Jurídicos', icon: <LiaGavelSolid />, path: '/admin-juridico' },
         { title: 'Balcão do Cidadão', icon: <LiaUserFriendsSolid />, path: '/admin-balcao' },
         { title: 'Ouvidoria', icon: <LiaUserAstronautSolid />, path: '/admin-ouvidoria' },

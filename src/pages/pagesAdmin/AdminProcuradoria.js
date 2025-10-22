@@ -51,6 +51,12 @@ const SolicitacaoModal = ({ solicitacao, onClose, onStatusChange, onSendMessage,
         setMessage('');
     };
 
+    const formatDate = (dateString) => {
+        if (!dateString) return 'N/A';
+        const date = new Date(dateString);
+        return date.toLocaleDateString('pt-BR', { timeZone: 'UTC' });
+    };
+
     return (
         <div className="modal-overlay" onClick={onClose}>
             <div className="modal-content" onClick={(e) => e.stopPropagation()}>
@@ -63,8 +69,11 @@ const SolicitacaoModal = ({ solicitacao, onClose, onStatusChange, onSendMessage,
                         <div className="card-header"><h3>Dados da Solicitante</h3></div>
                         {loadingProfile ? <p>Carregando...</p> : (
                             <>
-                                <div className="detail-item"><strong>Nome:</strong> {consumerProfile?.name || 'N/A'}</div>
+                                <div className="detail-item"><strong>Identificação:</strong> {solicitacao.dadosSolicitacao?.identificacao || 'N/A'}</div>
+                                <div className="detail-item"><strong>Nome:</strong> {consumerProfile?.name || 'Anônimo'}</div>
                                 <div className="detail-item"><strong>Email:</strong> {consumerProfile?.email || 'N/A'}</div>
+                                <div className="detail-item"><strong>Telefone:</strong> {consumerProfile?.phone || 'N/A'}</div>
+                                <div className="detail-item"><strong>CPF:</strong> {consumerProfile?.cpf || 'N/A'}</div>
                             </>
                         )}
                     </div>
@@ -72,8 +81,16 @@ const SolicitacaoModal = ({ solicitacao, onClose, onStatusChange, onSendMessage,
                     <div className="data-card" style={{ marginTop: '20px' }}>
                         <div className="card-header"><h3>Detalhes da Solicitação</h3></div>
                         <div className="detail-item"><strong>Tipo de Atendimento:</strong> {solicitacao.dadosSolicitacao?.tipoAtendimento || 'N/A'}</div>
+                        {solicitacao.dadosSolicitacao?.tipoViolencia && <div className="detail-item"><strong>Tipo de Violência:</strong> {solicitacao.dadosSolicitacao?.tipoViolencia}</div>}
                         <div className="detail-item"><strong>Assunto:</strong> {solicitacao.dadosSolicitacao?.assunto || 'N/A'}</div>
-                        <p className="detail-description">{solicitacao.dadosSolicitacao?.descricao || 'N/A'}</p>
+                        <div className="detail-item"><strong>Descrição:</strong><p className="detail-description">{solicitacao.dadosSolicitacao?.descricao || 'N/A'}</p></div>
+                    </div>
+
+                    <div className="data-card" style={{ marginTop: '20px' }}>
+                        <div className="card-header"><h3>Informações do Fato</h3></div>
+                        <div className="detail-item"><strong>Data do Fato:</strong> {formatDate(solicitacao.dadosSolicitacao?.dataFato)}</div>
+                        <div className="detail-item"><strong>Nome do Acusado:</strong> {solicitacao.dadosSolicitacao?.nomeAgressor || 'N/A'}</div>
+                        <div className="detail-item"><strong>Relação com o Acusado:</strong> {solicitacao.dadosSolicitacao?.relacaoAgressor || 'N/A'}</div>
                     </div>
 
                     <hr />

@@ -51,6 +51,12 @@ const ManifestacaoModal = ({ manifestacao, onClose, onStatusChange, onSendMessag
         setMessage('');
     };
 
+    const formatDate = (dateString) => {
+        if (!dateString) return 'N/A';
+        const date = new Date(dateString);
+        return date.toLocaleDateString('pt-BR', { timeZone: 'UTC' }); // Adiciona timezone para evitar problemas de fuso
+    };
+
     return (
         <div className="modal-overlay" onClick={onClose}>
             <div className="modal-content" onClick={(e) => e.stopPropagation()}>
@@ -63,7 +69,8 @@ const ManifestacaoModal = ({ manifestacao, onClose, onStatusChange, onSendMessag
                         <div className="card-header"><h3>Dados do Manifestante</h3></div>
                         {loadingProfile ? <p>Carregando...</p> : (
                             <>
-                                <div className="detail-item"><strong>Nome:</strong> {consumerProfile?.name || 'N/A'}</div>
+                                <div className="detail-item"><strong>Identificação:</strong> {manifestacao.dadosManifestacao?.identificacao || 'N/A'}</div>
+                                <div className="detail-item"><strong>Nome:</strong> {consumerProfile?.name || 'Anônimo'}</div>
                                 <div className="detail-item"><strong>Email:</strong> {consumerProfile?.email || 'N/A'}</div>
                             </>
                         )}
@@ -73,6 +80,9 @@ const ManifestacaoModal = ({ manifestacao, onClose, onStatusChange, onSendMessag
                         <div className="card-header"><h3>Detalhes da Manifestação</h3></div>
                         <div className="detail-item"><strong>Tipo:</strong> {manifestacao.dadosManifestacao?.tipoManifestacao || 'N/A'}</div>
                         <div className="detail-item"><strong>Assunto:</strong> {manifestacao.dadosManifestacao?.assunto || 'N/A'}</div>
+                        <div className="detail-item"><strong>Data do Fato:</strong> {formatDate(manifestacao.dadosManifestacao?.dataFato)}</div>
+                        <div className="detail-item"><strong>Local do Fato:</strong> {manifestacao.dadosManifestacao?.localFato || 'N/A'}</div>
+                        <div className="detail-item"><strong>Envolvidos:</strong> {manifestacao.dadosManifestacao?.envolvidos || 'N/A'}</div>
                         <p className="detail-description">{manifestacao.dadosManifestacao?.descricao || 'N/A'}</p>
                     </div>
 

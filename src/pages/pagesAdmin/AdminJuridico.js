@@ -53,6 +53,12 @@ const SolicitacaoJuridicoModal = ({ solicitacao, onClose, onStatusChange, onSend
         setMessage('');
     };
 
+    const formatDate = (dateStringOrTimestamp) => {
+        if (!dateStringOrTimestamp) return 'N/A';
+        const date = new Date(dateStringOrTimestamp);
+        return date.toLocaleDateString('pt-BR');
+    };
+
     return (
         <div className="modal-overlay" onClick={onClose}>
             <div className="modal-content" onClick={(e) => e.stopPropagation()}>
@@ -67,22 +73,29 @@ const SolicitacaoJuridicoModal = ({ solicitacao, onClose, onStatusChange, onSend
                             {loadingProfile ? <p>Carregando...</p> : (
                                 <>
                                     <div className="detail-item"><strong>Nome:</strong> {consumerProfile?.name || 'N/A'}</div>
+                                    <div className="detail-item"><strong>CPF:</strong> {consumerProfile?.cpf || 'N/A'}</div>
                                     <div className="detail-item"><strong>Email:</strong> {consumerProfile?.email || 'N/A'}</div>
                                     <div className="detail-item"><strong>Telefone:</strong> {consumerProfile?.phone || 'N/A'}</div>
+                                    <div className="detail-item"><strong>Endereço:</strong> {`${consumerProfile?.address || ''}, ${consumerProfile?.city || ''} - ${consumerProfile?.state || ''}`}</div>
+                                    <div className="detail-item"><strong>CEP:</strong> {consumerProfile?.cep || 'N/A'}</div>
                                 </>
                             )}
                         </div>
                         <div className="data-card">
                             <div className="card-header"><h3>Detalhes do Acontecimento</h3></div>
+                            <div className="detail-item"><strong>Data da Solicitação:</strong> {formatDate(solicitacao.dataSolicitacao)}</div>
                             <div className="detail-item"><strong>Assunto:</strong> {solicitacao.dadosAcontecimento?.assunto || 'N/A'}</div>
-                            <div className="detail-item"><strong>Data:</strong> {solicitacao.dadosAcontecimento?.dataAcontecimento || 'N/A'}</div>
-                            <div className="detail-item"><strong>Local:</strong> {`${solicitacao.dadosAcontecimento?.enderecoAcontecimento || ''}, ${solicitacao.dadosAcontecimento?.cidadeAcontecimento || ''}`}</div>
+                            <div className="detail-item"><strong>Data do Fato:</strong> {formatDate(solicitacao.dadosAcontecimento?.dataAcontecimento)}</div>
+                            <div className="detail-item"><strong>Endereço do Fato:</strong> {`${solicitacao.dadosAcontecimento?.enderecoAcontecimento || ''}, Nº ${solicitacao.dadosAcontecimento?.numeroAcontecimento || 's/n'}`}</div>
+                            <div className="detail-item"><strong>Bairro do Fato:</strong> {solicitacao.dadosAcontecimento?.bairroAcontecimento || 'N/A'}</div>
+                            <div className="detail-item"><strong>Cidade do Fato:</strong> {solicitacao.dadosAcontecimento?.cidadeAcontecimento || 'N/A'}</div>
+                            <div className="detail-item"><strong>CEP do Fato:</strong> {solicitacao.dadosAcontecimento?.cepAcontecimento || 'N/A'}</div>
                         </div>
                     </div>
 
                     <div className="data-card" style={{ marginTop: '20px' }}>
                         <div className="card-header"><h3>Descrição do Caso</h3></div>
-                        <p className="detail-description">{solicitacao.dadosAcontecimento?.descricao || 'N/A'}</p>
+                        <p className="detail-description">{solicitacao.dadosAcontecimento?.descricao || 'Nenhuma descrição fornecida.'}</p>
                     </div>
 
                     <hr />

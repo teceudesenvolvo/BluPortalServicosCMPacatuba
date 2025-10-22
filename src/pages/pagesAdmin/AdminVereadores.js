@@ -51,6 +51,12 @@ const SolicitacaoModal = ({ solicitacao, onClose, onStatusChange, onSendMessage,
         setMessage('');
     };
 
+    const formatDate = (dateStringOrTimestamp) => {
+        if (!dateStringOrTimestamp) return 'N/A';
+        const date = new Date(dateStringOrTimestamp);
+        return date.toLocaleDateString('pt-BR');
+    };
+
     return (
         <div className="modal-overlay" onClick={onClose}>
             <div className="modal-content" onClick={(e) => e.stopPropagation()}>
@@ -59,21 +65,28 @@ const SolicitacaoModal = ({ solicitacao, onClose, onStatusChange, onSendMessage,
                     <button onClick={onClose} className="modal-close-btn"><LiaTimesSolid /></button>
                 </div>
                 <div className="modal-body">
-                    <div className="data-card">
-                        <div className="card-header"><h3>Dados do Solicitante</h3></div>
-                        {loadingProfile ? <p>Carregando...</p> : (
-                            <>
-                                <div className="detail-item"><strong>Nome:</strong> {consumerProfile?.name || 'N/A'}</div>
-                                <div className="detail-item"><strong>Email:</strong> {consumerProfile?.email || 'N/A'}</div>
-                            </>
-                        )}
-                    </div>
+                    <div className="data-sections-grid">
+                        <div className="data-card">
+                            <div className="card-header"><h3>Dados do Solicitante</h3></div>
+                            {loadingProfile ? <p>Carregando...</p> : (
+                                <>
+                                    <div className="detail-item"><strong>Nome:</strong> {consumerProfile?.name || 'N/A'}</div>
+                                    <div className="detail-item"><strong>Email:</strong> {consumerProfile?.email || 'N/A'}</div>
+                                    <div className="detail-item"><strong>Telefone:</strong> {consumerProfile?.phone || 'N/A'}</div>
+                                    <div className="detail-item"><strong>Endereço:</strong> {`${consumerProfile?.address || ''}, ${consumerProfile?.city || ''}`}</div>
+                                </>
+                            )}
+                        </div>
 
-                    <div className="data-card" style={{ marginTop: '20px' }}>
-                        <div className="card-header"><h3>Detalhes da Solicitação</h3></div>
-                        <div className="detail-item"><strong>Vereador(a):</strong> {solicitacao.dadosSolicitacao?.vereadorNome || 'N/A'}</div>
-                        <div className="detail-item"><strong>Assunto:</strong> {solicitacao.dadosSolicitacao?.assunto || 'N/A'}</div>
-                        <p className="detail-description">{solicitacao.dadosSolicitacao?.descricao || 'N/A'}</p>
+                        <div className="data-card">
+                            <div className="card-header"><h3>Detalhes da Solicitação</h3></div>
+                            <div className="detail-item"><strong>Data da Solicitação:</strong> {formatDate(solicitacao.dataSolicitacao)}</div>
+                            <div className="detail-item"><strong>Vereador(a):</strong> {solicitacao.dadosSolicitacao?.vereadorNome || 'N/A'}</div>
+                            <div className="detail-item"><strong>Assunto:</strong> {solicitacao.dadosSolicitacao?.assunto || 'N/A'}</div>
+                            <div className="detail-item"><strong>Data Preferencial:</strong> {formatDate(solicitacao.dadosSolicitacao?.dataPreferencial)}</div>
+                            <div className="detail-item"><strong>Horário Preferencial:</strong> {solicitacao.dadosSolicitacao?.horarioPreferencial || 'N/A'}</div>
+                            <div className="detail-item"><strong>Descrição:</strong><p className="detail-description">{solicitacao.dadosSolicitacao?.descricao || 'N/A'}</p></div>
+                        </div>
                     </div>
 
                     <hr />
