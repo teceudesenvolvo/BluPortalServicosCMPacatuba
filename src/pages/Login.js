@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { signInWithEmailAndPassword, sendPasswordResetEmail } from 'firebase/auth';
 
 // Importa o hook de autenticação e a instância do auth
 import { useAuth } from '../contexts/FirebaseAuthContext';
@@ -57,6 +57,21 @@ const LoginPage = () => {
             } else {
                 setError('Ocorreu um erro ao tentar logar. Tente novamente.');
             }
+        }
+    };
+
+    const handlePasswordReset = async () => {
+        const emailForReset = window.prompt("Por favor, digite seu e-mail para receber o link de redefinição de senha:");
+        if (emailForReset) {
+            try {
+                await sendPasswordResetEmail(auth, emailForReset);
+                alert("E-mail de redefinição enviado! Verifique sua caixa de entrada (e a pasta de spam).");
+            } catch (err) {
+                console.error("Erro na redefinição de senha:", err);
+                setError("Falha ao enviar e-mail de redefinição. Verifique se o e-mail está correto e tente novamente.");
+            }
+        } else {
+            alert("Operação cancelada.");
         }
     };
 
@@ -134,7 +149,7 @@ const LoginPage = () => {
                     <button
                         type="button"
                         className="forgot-password"
-                        onClick={() => { /* Implementar recuperação de senha */ }}
+                        onClick={handlePasswordReset}
                     >
                         Esqueceu a senha?
                     </button>
