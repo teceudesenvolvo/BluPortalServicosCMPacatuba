@@ -9,6 +9,7 @@ import {
     LiaUsersSolid,
 } from "react-icons/lia";
 
+
 import Footer from '../components/Footer'; // Importa o novo componente
 import VereadoresSlider from '../components/VereadoresSlider'; // Importa o slider
 import Foto from '../assets/fachada2-cm.jpg'; // Imagem placeholder
