@@ -11,7 +11,7 @@ import {
 
 import Footer from '../components/Footer'; // Importa o novo componente
 import VereadoresSlider from '../components/VereadoresSlider'; // Importa o slider
-import Foto from '../assets/Capa274.bmp'; // Imagem placeholder
+import Foto from '../assets/fachada2-cm.jpg'; // Imagem placeholder
 // Componente: Item do Serviço (Todos vão para o Login)
 const ServiceButton = ({ icon, title, navigate }) => {
     return (
