@@ -5,10 +5,10 @@ import Chart from 'chart.js/auto';
 import { onAuthStateChanged } from 'firebase/auth';
 import { db, auth } from '../../firebase';
 import AdminSidebar from '../../components/AdminSidebar';
-import { LiaTimesSolid, LiaUploadSolid, LiaBellSolid, LiaPaperPlane } from "react-icons/lia";
+import { LiaTimesSolid, LiaUploadSolid, LiaPaperPlane } from "react-icons/lia";
 
 // Modal Component
-const SolicitacaoModal = ({ solicitacao, onClose, onStatusChange, onSendMessage, onFileUpload, onNotifyUser }) => {
+const SolicitacaoModal = ({ solicitacao, onClose, onStatusChange, onSendMessage, onFileUpload }) => {
     const [newStatus, setNewStatus] = useState(solicitacao ? solicitacao.status || '' : '');
     const [message, setMessage] = useState('');
     const [consumerProfile, setConsumerProfile] = useState(null);
@@ -44,7 +44,6 @@ const SolicitacaoModal = ({ solicitacao, onClose, onStatusChange, onSendMessage,
 
     const handleStatusSave = () => onStatusChange(solicitacao.id, newStatus);
     const handleFileUpload = (e) => onFileUpload(solicitacao.id, e.target.files[0]);
-    const handleNotifyUser = () => onNotifyUser(solicitacao);
     const handleSendMessage = () => {
         if (message.trim() === '') return;
         onSendMessage(solicitacao.id, message);
@@ -123,7 +122,6 @@ const SolicitacaoModal = ({ solicitacao, onClose, onStatusChange, onSendMessage,
 
                     <div className="form-actions" style={{ marginTop: '20px' }}>
                         <label className="btn-secondary"><LiaUploadSolid /> Enviar Arquivo<input type="file" hidden onChange={handleFileUpload} /></label>
-                        <button onClick={handleNotifyUser} className="btn-submit"><LiaBellSolid /> Notificar Usuário</button>
                     </div>
                 </div>
             </div>
@@ -242,9 +240,30 @@ const AdminVereadoresDashboard = () => {
     const handleOpenModal = (solicitacao) => setSelectedSolicitacao(solicitacao);
     const handleCloseModal = () => setSelectedSolicitacao(null);
 
+    const sendNotification = async (solicitacao) => {
+        if (!solicitacao.userId || solicitacao.userId === 'anonimo') {
+            console.log("Usuário anônimo, notificação não enviada.");
+            return;
+        }
+
+        const notificacoesRef = ref(db, 'notifications');
+        const newNotificationRef = push(notificacoesRef);
+        await set(newNotificationRef, {
+            isRead: false,
+            protocolo: solicitacao.id,
+            targetUserId: solicitacao.userId,
+            timestamp: serverTimestamp(),
+            tituloNotification: "Sua solicitação para os Vereadores teve movimentação.",
+            descricaoNotification: "Abra agora mesmo o aplicativo da Câmara Municipal de Pacatuba para acompanhar.",
+            userEmail: solicitacao.dadosUsuario.email,
+            userId: solicitacao.userId
+        });
+    };
+
     const handleStatusChange = async (id, newStatus) => {
         const itemRef = ref(db, `solicitacoes-vereadores/${id}`);
         await update(itemRef, { status: newStatus });
+        await sendNotification({ ...selectedSolicitacao, id, status: newStatus });
         alert('Status atualizado!');
         handleCloseModal();
     };
@@ -253,23 +272,8 @@ const AdminVereadoresDashboard = () => {
         const messagesRef = ref(db, `solicitacoes-vereadores/${id}/messages`);
         const newMessageRef = push(messagesRef);
         await set(newMessageRef, { text, sender: 'admin', timestamp: serverTimestamp() });
+        await sendNotification({ ...selectedSolicitacao, id });
         alert('Mensagem enviada!');
-    };
-
-    const handleNotifyUser = async (solicitacao) => {
-        const userData = solicitacao.dadosUsuario;
-        if (!userData || !userData.id) return alert("Usuário não identificado.");
-        
-        const notificacoesRef = ref(db, 'notificacoes');
-        const newNotificationRef = push(notificacoesRef);
-        await set(newNotificationRef, {
-            userId: userData.id,
-            userEmail: userData.email,
-            message: `Sua solicitação de atendimento com o(a) Vereador(a) ${solicitacao.dadosSolicitacao.vereadorNome} foi atualizada.`,
-            timestamp: serverTimestamp(),
-            read: false,
-        });
-        alert(`Usuário ${userData.email} notificado!`);
     };
 
     const handleAdminFileUpload = async (id, file) => {
@@ -351,7 +355,6 @@ const AdminVereadoresDashboard = () => {
                     onStatusChange={handleStatusChange}
                     onSendMessage={handleSendMessage}
                     onFileUpload={handleAdminFileUpload}
-                    onNotifyUser={handleNotifyUser}
                 />
             </div>
         </div>

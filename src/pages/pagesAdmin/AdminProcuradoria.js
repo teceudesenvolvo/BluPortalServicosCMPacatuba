@@ -5,10 +5,10 @@ import Chart from 'chart.js/auto';
 import { onAuthStateChanged } from 'firebase/auth';
 import { db, auth } from '../../firebase';
 import AdminSidebar from '../../components/AdminSidebar';
-import { LiaTimesSolid, LiaUploadSolid, LiaBellSolid, LiaPaperPlane } from "react-icons/lia";
+import { LiaTimesSolid, LiaUploadSolid, LiaPaperPlane } from "react-icons/lia";
 
 // Modal Component
-const SolicitacaoModal = ({ solicitacao, onClose, onStatusChange, onSendMessage, onFileUpload, onNotifyUser }) => {
+const SolicitacaoModal = ({ solicitacao, onClose, onStatusChange, onSendMessage, onFileUpload }) => {
     const [newStatus, setNewStatus] = useState(solicitacao ? solicitacao.status || '' : '');
     const [message, setMessage] = useState('');
     const [consumerProfile, setConsumerProfile] = useState(null);
@@ -44,7 +44,6 @@ const SolicitacaoModal = ({ solicitacao, onClose, onStatusChange, onSendMessage,
 
     const handleStatusSave = () => onStatusChange(solicitacao.id, newStatus);
     const handleFileUpload = (e) => onFileUpload(solicitacao.id, e.target.files[0]);
-    const handleNotifyUser = () => onNotifyUser(solicitacao);
     const handleSendMessage = () => {
         if (message.trim() === '') return;
         onSendMessage(solicitacao.id, message);
@@ -71,7 +70,7 @@ const SolicitacaoModal = ({ solicitacao, onClose, onStatusChange, onSendMessage,
                             <>
                                 <div className="detail-item"><strong>Identificação:</strong> {solicitacao.dadosSolicitacao?.identificacao || 'N/A'}</div>
                                 <div className="detail-item"><strong>Nome:</strong> {consumerProfile?.name || 'Anônimo'}</div>
-                                <div className="detail-item"><strong>Email:</strong> {consumerProfile?.email || 'N/A'}</div>
+                                <div className="detail-item"><strong>Email:</strong> {consumerProfile?.userEmail || 'N/A'}</div>
                                 <div className="detail-item"><strong>Telefone:</strong> {consumerProfile?.phone || 'N/A'}</div>
                                 <div className="detail-item"><strong>CPF:</strong> {consumerProfile?.cpf || 'N/A'}</div>
                             </>
@@ -127,7 +126,6 @@ const SolicitacaoModal = ({ solicitacao, onClose, onStatusChange, onSendMessage,
 
                     <div className="form-actions" style={{ marginTop: '20px' }}>
                         <label className="btn-secondary"><LiaUploadSolid /> Enviar Arquivo<input type="file" hidden onChange={handleFileUpload} /></label>
-                        <button onClick={handleNotifyUser} className="btn-submit"><LiaBellSolid /> Notificar Usuário</button>
                     </div>
                 </div>
             </div>
@@ -221,9 +219,30 @@ const AdminProcuradoriaDashboard = () => {
     const handleOpenModal = (solicitacao) => setSelectedSolicitacao(solicitacao);
     const handleCloseModal = () => setSelectedSolicitacao(null);
 
+    const sendNotification = async (solicitacao) => {
+        if (!solicitacao.userId || solicitacao.userId === 'anonimo') {
+            console.log("Usuário anônimo, notificação não enviada.");
+            return;
+        }
+
+        const notificacoesRef = ref(db, 'notifications');
+        const newNotificationRef = push(notificacoesRef);
+        await set(newNotificationRef, {
+            isRead: false,
+            protocolo: solicitacao.id,
+            targetUserId: solicitacao.userId,
+            timestamp: serverTimestamp(),
+            tituloNotification: "Sua solicitação para a Procuradoria da Mulher teve movimentação.",
+            descricaoNotification: "Abra agora mesmo o aplicativo da Câmara Municipal de Pacatuba para acompanhar.",
+            userEmail: solicitacao.dadosUsuario.email,
+            userId: solicitacao.userId
+        });
+    };
+
     const handleStatusChange = async (id, newStatus) => {
         const itemRef = ref(db, `procuradoria-mulher/${id}`);
         await update(itemRef, { status: newStatus });
+        await sendNotification({ ...selectedSolicitacao, id, status: newStatus });
         alert('Status atualizado!');
         handleCloseModal();
     };
@@ -232,23 +251,8 @@ const AdminProcuradoriaDashboard = () => {
         const messagesRef = ref(db, `procuradoria-mulher/${id}/messages`);
         const newMessageRef = push(messagesRef);
         await set(newMessageRef, { text, sender: 'admin', timestamp: serverTimestamp() });
+        await sendNotification({ ...selectedSolicitacao, id });
         alert('Mensagem enviada!');
-    };
-
-    const handleNotifyUser = async (solicitacao) => {
-        const userData = solicitacao.dadosUsuario;
-        if (!userData || !userData.id) return alert("Usuário anônimo não pode ser notificado.");
-        
-        const notificacoesRef = ref(db, 'notificacoes');
-        const newNotificationRef = push(notificacoesRef);
-        await set(newNotificationRef, {
-            userId: userData.id,
-            userEmail: userData.email,
-            message: `Seu atendimento na Procuradoria da Mulher sobre "${solicitacao.dadosSolicitacao.assunto}" foi atualizado.`,
-            timestamp: serverTimestamp(),
-            read: false,
-        });
-        alert(`Usuário ${userData.email} notificado!`);
     };
 
     const handleAdminFileUpload = async (id, file) => {
@@ -330,7 +334,6 @@ const AdminProcuradoriaDashboard = () => {
                     onStatusChange={handleStatusChange}
                     onSendMessage={handleSendMessage}
                     onFileUpload={handleAdminFileUpload}
-                    onNotifyUser={handleNotifyUser}
                 />
             </div>
         </div>

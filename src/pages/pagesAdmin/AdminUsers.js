@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ref, onValue, update } from 'firebase/database';
+import { ref, onValue, update, push, set, serverTimestamp } from 'firebase/database';
 import { onAuthStateChanged } from 'firebase/auth';
 import { db, auth } from '../../firebase';
 import AdminSidebar from '../../components/AdminSidebar';
@@ -120,10 +120,31 @@ const AdminUsersDashboard = () => {
     const handleOpenModal = (user) => setSelectedUser(user);
     const handleCloseModal = () => setSelectedUser(null);
 
+    const sendNotification = async (userData) => {
+        if (!userData.uid || !userData.email) {
+            console.log("Dados do usuário incompletos, notificação não enviada.");
+            return;
+        }
+
+        const notificacoesRef = ref(db, 'notifications');
+        const newNotificationRef = push(notificacoesRef);
+        await set(newNotificationRef, {
+            isRead: false,
+            protocolo: userData.uid,
+            targetUserId: userData.uid,
+            timestamp: serverTimestamp(),
+            tituloNotification: "Seu usuário foi atualizado.",
+            descricaoNotification: "Abra agora mesmo o aplicativo da Câmara Municipal de Pacatuba para acompanhar.",
+            userEmail: userData.email,
+            userId: userData.uid
+        });
+    };
+
     const handleSaveUser = async (userId, updatedData) => {
         const userRef = ref(db, `users/${userId}`);
         try {
             await update(userRef, updatedData);
+            await sendNotification({ uid: userId, email: updatedData.email });
             alert('Usuário atualizado com sucesso!');
             handleCloseModal();
         } catch (error) {

@@ -5,10 +5,10 @@ import Chart from 'chart.js/auto';
 import { onAuthStateChanged } from 'firebase/auth';
 import { db, auth } from '../../firebase';
 import AdminSidebar from '../../components/AdminSidebar';
-import { LiaTimesSolid, LiaUploadSolid, LiaBellSolid, LiaPaperPlane } from "react-icons/lia";
+import { LiaTimesSolid, LiaUploadSolid, LiaPaperPlane } from "react-icons/lia";
 
 // Modal Component
-const ManifestacaoModal = ({ manifestacao, onClose, onStatusChange, onSendMessage, onFileUpload, onNotifyUser }) => {
+const ManifestacaoModal = ({ manifestacao, onClose, onStatusChange, onSendMessage, onFileUpload }) => {
     const [newStatus, setNewStatus] = useState(manifestacao ? manifestacao.status || '' : '');
     const [message, setMessage] = useState('');
     const [consumerProfile, setConsumerProfile] = useState(null);
@@ -44,7 +44,6 @@ const ManifestacaoModal = ({ manifestacao, onClose, onStatusChange, onSendMessag
 
     const handleStatusSave = () => onStatusChange(manifestacao.id, newStatus);
     const handleFileUpload = (e) => onFileUpload(manifestacao.id, e.target.files[0]);
-    const handleNotifyUser = () => onNotifyUser(manifestacao);
     const handleSendMessage = () => {
         if (message.trim() === '') return;
         onSendMessage(manifestacao.id, message);
@@ -120,7 +119,6 @@ const ManifestacaoModal = ({ manifestacao, onClose, onStatusChange, onSendMessag
 
                     <div className="form-actions" style={{ marginTop: '20px' }}>
                         <label className="btn-secondary"><LiaUploadSolid /> Enviar Arquivo<input type="file" hidden onChange={handleFileUpload} /></label>
-                        <button onClick={handleNotifyUser} className="btn-submit"><LiaBellSolid /> Notificar Usuário</button>
                     </div>
                 </div>
             </div>
@@ -214,9 +212,30 @@ const AdminOuvidoriaDashboard = () => {
     const handleOpenModal = (manifestacao) => setSelectedManifestacao(manifestacao);
     const handleCloseModal = () => setSelectedManifestacao(null);
 
+    const sendNotification = async (manifestacao) => {
+        if (!manifestacao.userId || manifestacao.userId === 'anonimo') {
+            console.log("Usuário anônimo, notificação não enviada.");
+            return;
+        }
+
+        const notificacoesRef = ref(db, 'notifications');
+        const newNotificationRef = push(notificacoesRef);
+        await set(newNotificationRef, {
+            isRead: false,
+            protocolo: manifestacao.id,
+            targetUserId: manifestacao.userId,
+            timestamp: serverTimestamp(),
+            tituloNotification: "Sua solicitação para a Ouvidoria teve movimentação.",
+            descricaoNotification: "Abra agora mesmo o aplicativo da Câmara Municipal de Pacatuba para acompanhar.",
+            userEmail: manifestacao.dadosUsuario.email,
+            userId: manifestacao.userId
+        });
+    };
+
     const handleStatusChange = async (id, newStatus) => {
         const itemRef = ref(db, `ouvidoria/${id}`);
         await update(itemRef, { status: newStatus });
+        await sendNotification({ ...selectedManifestacao, id, status: newStatus });
         alert('Status atualizado!');
         handleCloseModal();
     };
@@ -225,23 +244,8 @@ const AdminOuvidoriaDashboard = () => {
         const messagesRef = ref(db, `ouvidoria/${id}/messages`);
         const newMessageRef = push(messagesRef);
         await set(newMessageRef, { text, sender: 'admin', timestamp: serverTimestamp() });
+        await sendNotification({ ...selectedManifestacao, id });
         alert('Mensagem enviada!');
-    };
-
-    const handleNotifyUser = async (manifestacao) => {
-        const userData = manifestacao.dadosUsuario;
-        if (!userData || !userData.id) return alert("Usuário anônimo não pode ser notificado.");
-        
-        const notificacoesRef = ref(db, 'notificacoes');
-        const newNotificationRef = push(notificacoesRef);
-        await set(newNotificationRef, {
-            userId: userData.id,
-            userEmail: userData.email,
-            message: `Sua manifestação na Ouvidoria sobre "${manifestacao.dadosManifestacao.assunto}" foi atualizada.`,
-            timestamp: serverTimestamp(),
-            read: false,
-        });
-        alert(`Usuário ${userData.email} notificado!`);
     };
 
     const handleAdminFileUpload = async (id, file) => {
@@ -323,7 +327,6 @@ const AdminOuvidoriaDashboard = () => {
                     onStatusChange={handleStatusChange}
                     onSendMessage={handleSendMessage}
                     onFileUpload={handleAdminFileUpload}
-                    onNotifyUser={handleNotifyUser}
                 />
             </div>
         </div>

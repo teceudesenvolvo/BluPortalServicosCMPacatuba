@@ -21,7 +21,7 @@ const AtendimentoModal = ({ atendimento, onClose }) => {
                     <h3>Detalhes da Solicitação</h3>
                     <button onClick={onClose} className="modal-close-btn">
                         <LiaTimesSolid />
-                    </button>
+                    </button> 
                 </div>
                 <div className="modal-body">
                     <div className="detail-item"><strong>Situação:</strong> <span className={`status-badge ${getStatusClass(status)}`}>{status}</span></div>

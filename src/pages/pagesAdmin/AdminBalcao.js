@@ -203,9 +203,30 @@ const AdminBalcaoDashboard = () => {
     const handleOpenModal = (solicitacao) => setSelectedSolicitacao(solicitacao);
     const handleCloseModal = () => setSelectedSolicitacao(null);
 
+    const sendNotification = async (solicitacao) => {
+        if (!solicitacao.userId || solicitacao.userId === 'anonimo') {
+            console.log("Usuário anônimo, notificação não enviada.");
+            return;
+        }
+
+        const notificacoesRef = ref(db, 'notifications');
+        const newNotificationRef = push(notificacoesRef);
+        await set(newNotificationRef, {
+            isRead: false,
+            protocolo: solicitacao.id,
+            targetUserId: solicitacao.userId,
+            timestamp: serverTimestamp(),
+            tituloNotification: "Sua solicitação para o Balcão do cidadão teve movimentação.",
+            descricaoNotification: "Abra agora mesmo o aplicativo da Câmara Municipal de Pacatuba para acompanhar.",
+            userEmail: solicitacao.dadosUsuario.email,
+            userId: solicitacao.userId
+        });
+    };
+
     const handleStatusChange = async (id, newStatus) => {
         const itemRef = ref(db, `balcao-cidadao/${id}`);
         await update(itemRef, { status: newStatus });
+        await sendNotification({ ...selectedSolicitacao, id, status: newStatus });
         alert('Status atualizado!');
         handleCloseModal();
     };
@@ -214,6 +235,7 @@ const AdminBalcaoDashboard = () => {
         const messagesRef = ref(db, `balcao-cidadao/${id}/messages`);
         const newMessageRef = push(messagesRef);
         await set(newMessageRef, { text, sender: 'admin', timestamp: serverTimestamp() });
+        await sendNotification({ ...selectedSolicitacao, id });
         alert('Mensagem enviada!');
     };
 

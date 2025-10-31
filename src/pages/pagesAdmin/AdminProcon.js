@@ -5,12 +5,12 @@ import Chart from 'chart.js/auto'; // Importa Chart.js
 import { onAuthStateChanged } from 'firebase/auth';
 import { db, auth } from '../../firebase'; // Importa as instâncias corretas do Firebase
 import AdminSidebar from '../../components/AdminSidebar'; // Importa o novo Sidebar de Admin
-import { LiaTimesSolid, LiaPaperclipSolid, LiaUploadSolid, LiaBellSolid, LiaPaperPlane } from "react-icons/lia";
+import { LiaTimesSolid, LiaPaperclipSolid, LiaUploadSolid, LiaPaperPlane } from "react-icons/lia";
 
 // =============================================================
 // Componente Modal de Detalhes da Denúncia
 // =============================================================
-const ComplaintDetailsModal = ({ denuncia, onClose, onStatusChange, onSendMessage, onFileUpload, onNotifyUser }) => {
+const ComplaintDetailsModal = ({ denuncia, onClose, onStatusChange, onSendMessage, onFileUpload }) => {
     const [newStatus, setNewStatus] = useState(denuncia ? denuncia.status || '' : '');
     const [message, setMessage] = useState('');
     const [consumerProfile, setConsumerProfile] = useState(null);
@@ -65,10 +65,6 @@ const ComplaintDetailsModal = ({ denuncia, onClose, onStatusChange, onSendMessag
     const handleFileUpload = (e) => {
         // Lógica para upload de arquivo pelo admin (a ser implementada)
         onFileUpload(denuncia.id, e.target.files[0]);
-    };
-
-    const handleNotifyUser = () => {
-        onNotifyUser(denuncia);
     };
 
     const handleSendMessage = () => {
@@ -170,7 +166,6 @@ const ComplaintDetailsModal = ({ denuncia, onClose, onStatusChange, onSendMessag
 
                     <div className="form-actions" style={{ marginTop: '20px' }}>
                         <label className="btn-secondary"><LiaUploadSolid /> Enviar Arquivo ao Usuário<input type="file" hidden onChange={handleFileUpload} /></label>
-                        <button onClick={handleNotifyUser} className="btn-submit"><LiaBellSolid /> Notificar Usuário</button>
                     </div>
                 </div>
             </div>
@@ -336,9 +331,45 @@ const AdminProconDashboard = () => {
         setSelectedDenuncia(null);
     };
 
+    const sendNotification = async (denuncia) => {
+        if (!denuncia.userId || denuncia.userId === 'anonimo') {
+            console.log("Usuário anônimo, notificação não enviada.");
+            return;
+        }
+
+        // Busca o perfil do usuário para garantir que os dados estão atualizados
+        const userRef = ref(db, `users/${denuncia.userId}`);
+        let userProfile = denuncia.userDataAtTimeOfComplaint; // Fallback
+
+        try {
+            const snapshot = await get(userRef);
+            if (snapshot.exists()) {
+                userProfile = snapshot.val();
+            }
+        } catch (error) {
+            console.error("Erro ao buscar perfil do usuário para notificação:", error);
+        }
+
+        if (!userProfile || !userProfile.email) return; // Não envia se não encontrar o email
+
+        const notificacoesRef = ref(db, 'notifications');
+        const newNotificationRef = push(notificacoesRef);
+        await set(newNotificationRef, {
+            isRead: false,
+            protocolo: denuncia.id,
+            targetUserId: denuncia.userId,
+            timestamp: serverTimestamp(),
+            tituloNotification: "Sua solicitação para o Procon teve movimentação.",
+            descricaoNotification: "Abra agora mesmo o aplicativo da Câmara Municipal de Pacatuba para acompanhar.",
+            userEmail: userProfile.email,
+            userId: denuncia.userId
+        });
+    };
+
     const handleStatusChange = async (denunciaId, newStatus) => {
         const denunciaRef = ref(db, `denuncias-procon/${denunciaId}`);
         await update(denunciaRef, { status: newStatus });
+        await sendNotification({ ...selectedDenuncia, id: denunciaId, status: newStatus });
         alert('Status atualizado com sucesso!');
         handleCloseModal();
     };
@@ -346,41 +377,13 @@ const AdminProconDashboard = () => {
     const handleSendMessage = async (denunciaId, messageText) => {
         const messagesRef = ref(db, `denuncias-procon/${denunciaId}/messages`);
         const newMessageRef = push(messagesRef);
-        try {
-            await set(newMessageRef, {
-                text: messageText,
-                sender: 'admin',
-                timestamp: serverTimestamp(),
-            });
-            alert('Mensagem enviada com sucesso!');
-        } catch (error) {
-            alert('Falha ao enviar mensagem.');
-            console.error("Erro ao enviar mensagem:", error);
-        }
-    };
-
-    const handleNotifyUser = async (denuncia) => {
-        const userData = denuncia.userDataAtTimeOfComplaint;
-        if (!userData || !userData.id) {
-            alert("Não foi possível identificar o usuário desta reclamação.");
-            return;
-        }
-
-        const notificacoesRef = ref(db, 'notificacoes');
-        const newNotificationRef = push(notificacoesRef);
-        try {
-            await set(newNotificationRef, {
-                userId: userData.id,
-                userEmail: userData.email,
-                message: `Sua reclamação de protocolo ${denuncia.protocolo} foi atualizada.`,
-                timestamp: serverTimestamp(),
-                read: false, // Para controle de leitura
-            });
-            alert(`Usuário ${userData.email} notificado com sucesso!`);
-        } catch (error) {
-            alert("Falha ao enviar notificação.");
-            console.error("Erro ao criar notificação:", error);
-        }
+        await set(newMessageRef, {
+            text: messageText,
+            sender: 'admin',
+            timestamp: serverTimestamp(),
+        });
+        await sendNotification({ ...selectedDenuncia, id: denunciaId });
+        alert('Mensagem enviada com sucesso!');
     };
 
     const handleAdminFileUpload = async (denunciaId, file) => {
@@ -510,7 +513,6 @@ const AdminProconDashboard = () => {
                     onStatusChange={handleStatusChange}
                     onSendMessage={handleSendMessage}
                     onFileUpload={handleAdminFileUpload}
-                    onNotifyUser={handleNotifyUser}
                 />
 
             </div>

@@ -5,12 +5,12 @@ import Chart from 'chart.js/auto';
 import { onAuthStateChanged } from 'firebase/auth';
 import { db, auth } from '../../firebase';
 import AdminSidebar from '../../components/AdminSidebar';
-import { LiaTimesSolid, LiaUploadSolid, LiaBellSolid, LiaPaperPlane } from "react-icons/lia";
+import { LiaTimesSolid, LiaUploadSolid, LiaPaperPlane } from "react-icons/lia";
 
 // =============================================================
 // Componente Modal de Detalhes da Solicitação Jurídica
 // =============================================================
-const SolicitacaoJuridicoModal = ({ solicitacao, onClose, onStatusChange, onSendMessage, onFileUpload, onNotifyUser }) => {
+const SolicitacaoJuridicoModal = ({ solicitacao, onClose, onStatusChange, onSendMessage, onFileUpload }) => {
     const [newStatus, setNewStatus] = useState(solicitacao ? solicitacao.status || '' : '');
     const [message, setMessage] = useState('');
     const [consumerProfile, setConsumerProfile] = useState(null);
@@ -46,7 +46,6 @@ const SolicitacaoJuridicoModal = ({ solicitacao, onClose, onStatusChange, onSend
 
     const handleStatusSave = () => onStatusChange(solicitacao.id, newStatus);
     const handleFileUpload = (e) => onFileUpload(solicitacao.id, e.target.files[0]);
-    const handleNotifyUser = () => onNotifyUser(solicitacao);
     const handleSendMessage = () => {
         if (message.trim() === '') return;
         onSendMessage(solicitacao.id, message);
@@ -131,7 +130,6 @@ const SolicitacaoJuridicoModal = ({ solicitacao, onClose, onStatusChange, onSend
 
                     <div className="form-actions" style={{ marginTop: '20px' }}>
                         <label className="btn-secondary"><LiaUploadSolid /> Enviar Arquivo<input type="file" hidden onChange={handleFileUpload} /></label>
-                        <button onClick={handleNotifyUser} className="btn-submit"><LiaBellSolid /> Notificar Usuário</button>
                     </div>
                 </div>
             </div>
@@ -251,9 +249,30 @@ const AdminJuridicoDashboard = () => {
     const handleOpenModal = (solicitacao) => setSelectedSolicitacao(solicitacao);
     const handleCloseModal = () => setSelectedSolicitacao(null);
 
+    const sendNotification = async (solicitacao) => {
+        if (!solicitacao.userId || solicitacao.userId === 'anonimo') {
+            console.log("Usuário anônimo, notificação não enviada.");
+            return;
+        }
+
+        const notificacoesRef = ref(db, 'notifications');
+        const newNotificationRef = push(notificacoesRef);
+        await set(newNotificationRef, {
+            isRead: false,
+            protocolo: solicitacao.id,
+            targetUserId: solicitacao.userId,
+            timestamp: serverTimestamp(),
+            tituloNotification: "Sua solicitação para o Atendimento Juridico teve movimentação.",
+            descricaoNotification: "Abra agora mesmo o aplicativo da Câmara Municipal de Pacatuba para acompanhar.",
+            userEmail: solicitacao.dadosUsuario.email,
+            userId: solicitacao.userId
+        });
+    };
+
     const handleStatusChange = async (solicitacaoId, newStatus) => {
         const solicitacaoRef = ref(db, `atendimento-juridico/${solicitacaoId}`);
         await update(solicitacaoRef, { status: newStatus });
+        await sendNotification({ ...selectedSolicitacao, id: solicitacaoId, status: newStatus });
         alert('Status atualizado com sucesso!');
         handleCloseModal();
     };
@@ -261,38 +280,13 @@ const AdminJuridicoDashboard = () => {
     const handleSendMessage = async (solicitacaoId, messageText) => {
         const messagesRef = ref(db, `atendimento-juridico/${solicitacaoId}/messages`);
         const newMessageRef = push(messagesRef);
-        try {
-            await set(newMessageRef, {
-                text: messageText,
-                sender: 'admin',
-                timestamp: serverTimestamp(),
-            });
-            alert('Mensagem enviada com sucesso!');
-        } catch (error) {
-            alert('Falha ao enviar mensagem.');
-        }
-    };
-
-    const handleNotifyUser = async (solicitacao) => {
-        const userData = solicitacao.dadosUsuario;
-        if (!userData || !userData.id) {
-            alert("Não foi possível identificar o usuário desta solicitação.");
-            return;
-        }
-        const notificacoesRef = ref(db, 'notificacoes');
-        const newNotificationRef = push(notificacoesRef);
-        try {
-            await set(newNotificationRef, {
-                userId: userData.id,
-                userEmail: userData.email,
-                message: `Sua solicitação jurídica sobre "${solicitacao.dadosAcontecimento.assunto}" foi atualizada.`,
-                timestamp: serverTimestamp(),
-                read: false,
-            });
-            alert(`Usuário ${userData.email} notificado com sucesso!`);
-        } catch (error) {
-            alert("Falha ao enviar notificação.");
-        }
+        await set(newMessageRef, {
+            text: messageText,
+            sender: 'admin',
+            timestamp: serverTimestamp(),
+        });
+        await sendNotification({ ...selectedSolicitacao, id: solicitacaoId });
+        alert('Mensagem enviada com sucesso!');
     };
 
     const handleAdminFileUpload = async (solicitacaoId, file) => {
@@ -381,7 +375,6 @@ const AdminJuridicoDashboard = () => {
                     onStatusChange={handleStatusChange}
                     onSendMessage={handleSendMessage}
                     onFileUpload={handleAdminFileUpload}
-                    onNotifyUser={handleNotifyUser}
                 />
             </div>
         </div>
