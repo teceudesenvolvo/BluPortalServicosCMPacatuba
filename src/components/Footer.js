@@ -2,7 +2,6 @@ import React from 'react';
 import Logo from '../assets/logo-pacatuba.png';
 import AppStore from '../assets/AppStore.png';
 import GooglePlay from '../assets/GooglePlay.png';
-import QrCode from '../assets/QrCode.png';
 
 
 const Footer = () => {
@@ -41,9 +40,12 @@ const Footer = () => {
                
                 <div className="app-badges" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: '-10px' }}>
                     <p>Baixe nosso aplicativo:</p>
-                    <img src={QrCode} alt="QR Code" style={{ width: '60px', height: '60px', margin: 12}} />
-                    <img src={AppStore} alt="App Store" style={{ width: '150px'}} />
-                    <img src={GooglePlay} alt="Google Play" style={{ width: '150px' }} />
+                    <a href="https://apps.apple.com/br/app/cm-pacatuba/id6755323399" target="_blank" rel="noopener noreferrer">
+                        <img src={AppStore} alt="App Store" style={{ width: '150px'}} />
+                    </a>
+                    <a href="https://play.google.com/store/apps/details?id=com.cmpacatuba.cmpacatuba" target="_blank" rel="noopener noreferrer">
+                        <img src={GooglePlay} alt="Google Play" style={{ width: '150px' }} />
+                    </a>
                 </div>
             </div>
         </div>
