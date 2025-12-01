@@ -4,7 +4,6 @@ import {
     LiaBookOpenSolid,
     LiaBalanceScaleLeftSolid,
     LiaUserFriendsSolid,
-    LiaUserAstronautSolid,
     LiaFemaleSolid,
     LiaUsersSolid,
 } from "react-icons/lia";
@@ -35,7 +34,6 @@ const HomePage = () => {
         procon: <LiaBookOpenSolid />,
         juridico: <LiaBalanceScaleLeftSolid />,
         balcao: <LiaUserFriendsSolid />,
-        ouvidoria: <LiaUserAstronautSolid />,
         procuradoria: <LiaFemaleSolid />,
         vereadores: <LiaUsersSolid />
     };
