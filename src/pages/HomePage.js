@@ -55,7 +55,7 @@ const HomePage = () => {
                         <button className="btn-home-cadastrar" onClick={() => navigate('/cadastro')}>Cadastrar</button>
                     </div>
                 </div>
-            </header>
+            </header> 
 
             {/* 2. Seção de Serviços */}
             <section className="services-grid-section">
@@ -63,7 +63,6 @@ const HomePage = () => {
                     <ServiceButton icon={icons.procon} title="Procon" navigate={navigate} />
                     <ServiceButton icon={icons.juridico} title="Atendimento Jurídico" navigate={navigate} />
                     <ServiceButton icon={icons.balcao} title="Balcão do Cidadão" navigate={navigate} />
-                    <ServiceButton icon={icons.ouvidoria} title="Ouvidoria" navigate={navigate} />
                     <ServiceButton icon={icons.procuradoria} title="Procuradoria da Mulher" navigate={navigate} />
                     {/* O botão "Vereadores" da grade vai para Login, mas o slider abaixo é para informações abertas */}
                     <ServiceButton icon={icons.vereadores} title="Vereadores" navigate={navigate} />
